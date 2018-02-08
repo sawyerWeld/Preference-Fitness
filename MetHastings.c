@@ -1,5 +1,6 @@
 // Compile with 'gcc MetHastings.c -std=c99'
 // TODO: Add random seed, create normal distribution
+// TODO: fix vscode json run config, was "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -98,10 +99,11 @@ int main() {
         return 1;
     }
  
-    double values[100];        
+    double values[2][100];        
  
     for(int i = 0; i < 100; ++i) {
-        fscanf(f, "%lf",&values[i]);
+		values[0][i] = i;
+        fscanf(f, "%lf",&values[1][i]);
         //printf("%lf\n",values[i]);
      }
 
@@ -111,8 +113,8 @@ int main() {
 
     // mcmc stuff
 
-	double starting_params[] = {1,1,1};
-    metHastings(addList,starting_params,3,20);
+	double starting_params[] = {1,1};
+    metHastings(addList,starting_params,2,20);
     return 0;
 }
 
