@@ -1,11 +1,14 @@
 // Compile with 'gcc MetHastings.c -std=c99'
-// TODO: Add random seed, create normal distribution
-// TODO: fix vscode json run config, was "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
+// TODO: Add random seed
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
+
+double values[2][10];
+int values_size = 10;
 
 //	Placeholder method of same signature as mallows just for testing
 //	Returns the sum of doubles in nums[]
@@ -19,13 +22,18 @@ double addList(double nums[], int len) {
 }
 
 // normal random [0:1]
-double randZeroOne(){ 
-	return (double)rand()/RAND_MAX;
+double randNegOnetoOne(){ 
+	return -1 + (2 * (double)rand()/RAND_MAX);
 }
 
-double gaussianCostFunction(double a, double b) {
-	// unsure how this works, but part should look like this
-	return -1 * (a * a) + (b * b);
+double gaussianCostFunction(double theta) {
+	double loss = 0;
+	for (int i = 0; i < values_size; i++) {
+		double temp = (theta * values[1][i]) - values[0][i];
+		loss += temp * temp;
+	}
+	return loss;
+	//lose(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
 }
 
 // cost_model : the function to find distribution of
@@ -34,21 +42,21 @@ double gaussianCostFunction(double a, double b) {
 // runs : how many runs to perform
 // todo: add burn in
 
-void metHastings(double(cost_model)(double[],int), double params_[], int num, int runs) {
+void metHastings(double(cost_model)(double[],int), double params_[], int num_params, int runs) {
 
 	int N = runs;
 	int step = 0; // using steps in a while to make burn in easier to implement
-	double samples[N][num]; // needs to be 2d, with params.len cols
+	double samples[N][num_params]; // needs to be 2d, with params.len cols
 
-	double params[num]; 
-	memcpy(params,params_,num*sizeof(double));
+	double params[num_params]; 
+	memcpy(params,params_,num_params*sizeof(double));
 
-	for (int i = 0; i < num; i++) {
+	for (int i = 0; i < num_params; i++) {
 		samples[0][i] = params[i];
 	}
 
-	while (step != N-1) { // check for off by one errors
-		double prev_cost = cost_model(samples[step],num);
+	while (step != N-1) { // using a while instead of a for bc i think it will be easier to add burn-in
+		double prev_cost = cost_model(samples[step],num_params);
 
 
 		// Slightly alter the parameters so we can explore the space
@@ -56,39 +64,48 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num, in
 		// be explored, so i've left it as a placeholder for now.
 		// I'm thinking the best way would be to sample a gaussian
 		// with center on the parameter and s.d. something like .05
-		double cur_params[num];
-		for (int i = 0; i<num; i++) 
-			cur_params[i] = samples[step][i]+randZeroOne()-randZeroOne();
+		double cur_params[num_params];
+		for (int i = 0; i<num_params; i++) 
+			cur_params[i] = samples[step][i]+randNegOnetoOne();
 
-		double cur_cost = cost_model(cur_params,num);
+		double cur_cost = cost_model(cur_params,num_params);
 
-		double u = randZeroOne();
+		double u = randNegOnetoOne();
 		
 		// Acceptance Ratio
 		double alpha = cur_cost / prev_cost;
 
 		if (alpha > u) { //accepted
-			memcpy(samples[step+1],cur_params,num*sizeof(double));
+			memcpy(samples[step+1],cur_params,num_params*sizeof(double));
 		} else { // denied
-			memcpy(samples[step+1],samples[step],num*sizeof(double));
+			memcpy(samples[step+1],samples[step],num_params*sizeof(double));
 		}
 		step++;
 	}
 
 
-	printf("Run #\tParameters to cost function\t\n");
+	// Writing the output file	
+
+	FILE * fp;
+   	fp = fopen ("outputfile.txt","w");
+	   //printf("Run #\tParameters to cost function\t\n");
 	for (int i = 0; i < N; i++) {
-		printf("%d:\t", i);
-		for (int j = 0; j < num; j++) {
-			printf("%f\t",samples[i][j]);
+		//fprintf(fp,"%d:\t", i);
+		for (int j = 0; j < num_params; j++) {
+			fprintf(fp,"%f, ",samples[i][j]);
 		}
-		printf("\n");
+		//fprintf(fp,"\n");
 	}
+
+	fclose (fp);
 
 	return;
 }
 
 int main() {
+	time_t t;
+	srand((unsigned) time(&t));
+
 
 	// read list of [1:100] with gauss noise
 
@@ -99,13 +116,15 @@ int main() {
         return 1;
     }
  
-    double values[2][100];        
+    //double values[2][100];        
  
-    for(int i = 0; i < 100; ++i) {
-		values[0][i] = i;
-        fscanf(f, "%lf",&values[1][i]);
-        //printf("%lf\n",values[i]);
-     }
+	// The below commented code prints the inputs to make sure you have the correct
+	
+    // for(int i = 0; i < 10; ++i) {
+	// 	values[0][i] = i;
+    //     fscanf(f, "%lf",&values[1][i]);
+    //     printf("%d\t%lf\n",i,values[1][i]);
+    //  }
 
      
  
@@ -113,8 +132,8 @@ int main() {
 
     // mcmc stuff
 
-	double starting_params[] = {1,1};
-    metHastings(addList,starting_params,2,20);
+	double starting_params[] = {1};
+    metHastings(addList,starting_params,1,200);
     return 0;
 }
 
