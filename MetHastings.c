@@ -33,7 +33,7 @@ double gaussianCostFunction(double theta) {
 		loss += temp * temp;
 	}
 	return loss;
-	//lose(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
+	//loss(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
 }
 
 // cost_model : the function to find distribution of
@@ -42,21 +42,27 @@ double gaussianCostFunction(double theta) {
 // runs : how many runs to perform
 // todo: add burn in
 
-void metHastings(double(cost_model)(double[],int), double params_[], int num_params, int runs) {
+void metHastings(double(cost_model)(double[],int), double params_[], int num_params, int runs, int burn_in) {
 
 	int N = runs;
 	int step = 0; // using steps in a while to make burn in easier to implement
-	double samples[N][num_params]; // needs to be 2d, with params.len cols
+	//double samples[N][num_params]; // needs to be 2d, with params.len cols
 
-	double params[num_params]; 
+	double params[num_params]; // parameters we search over
 	memcpy(params,params_,num_params*sizeof(double));
 
-	for (int i = 0; i < num_params; i++) {
-		samples[0][i] = params[i];
-	}
+	// for (int i = 0; i < num_params; i++) {
+	// 	samples[0][i] = params[i];
+	// }
+
+	double prev_cost = cost_model(params,num_params); // need to set this to something
+
+
+	FILE * fp;
+   	fp = fopen ("outputfile.txt","w");
 
 	while (step != N-1) { // using a while instead of a for bc i think it will be easier to add burn-in
-		double prev_cost = cost_model(samples[step],num_params);
+		prev_cost = cost_model(params,num_params);
 
 
 		// Slightly alter the parameters so we can explore the space
@@ -64,9 +70,14 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		// be explored, so i've left it as a placeholder for now.
 		// I'm thinking the best way would be to sample a gaussian
 		// with center on the parameter and s.d. something like .05
+
+		// todo update that comment block
+
 		double cur_params[num_params];
-		for (int i = 0; i<num_params; i++) 
-			cur_params[i] = samples[step][i]+randNegOnetoOne();
+		for (int i = 0; i<num_params; i++) {
+			//cur_params[i] = samples[step][i]+randNegOnetoOne();
+			cur_params[i] = params[i] + randNegOnetoOne();
+		}
 
 		double cur_cost = cost_model(cur_params,num_params);
 
@@ -76,25 +87,29 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		double alpha = cur_cost / prev_cost;
 
 		if (alpha > u) { //accepted
-			memcpy(samples[step+1],cur_params,num_params*sizeof(double));
+			//memcpy(samples[step+1],cur_params,num_params*sizeof(double));
+			// set params to cur_params
+			memcpy(params,cur_params,num_params*sizeof(double));
+			// set prev_cost to cur_cost
+			prev_cost = cur_cost;
 		} else { // denied
-			memcpy(samples[step+1],samples[step],num_params*sizeof(double));
+			//memcpy(samples[step+1],samples[step],num_params*sizeof(double));
 		}
+		if (step > burn_in)
+			fprintf(fp,"%f\n",cur_params[0]); // should look over all
 		step++;
 	}
 
 
 	// Writing the output file	
 
-	FILE * fp;
-   	fp = fopen ("outputfile.txt","w");
 	   //printf("Run #\tParameters to cost function\t\n");
 	for (int i = 0; i < N; i++) {
-		//fprintf(fp,"%d:\t", i);
-		for (int j = 0; j < num_params; j++) {
-			fprintf(fp,"%f, ",samples[i][j]);
-		}
-		//fprintf(fp,"\n");
+		
+		// for (int j = 0; j < num_params; j++) {
+		// 	fprintf(fp,"%f, ",samples[i][j]);
+		// }
+		
 	}
 
 	fclose (fp);
@@ -132,8 +147,8 @@ int main() {
 
     // mcmc stuff
 
-	double starting_params[] = {1};
-    metHastings(addList,starting_params,1,200);
+	double starting_params[] = {100};
+    metHastings(addList,starting_params,1,20000,10000);
     return 0;
 }
 
