@@ -7,8 +7,8 @@
 #include <time.h>
 #include <unistd.h>
 
-double values[2][10];
-int values_size = 10;
+double values[2][100];
+int values_size = 100;
 
 //	Placeholder method of same signature as mallows just for testing
 //	Returns the sum of doubles in nums[]
@@ -26,12 +26,14 @@ double randNegOnetoOne(){
 	return -1 + (2 * (double)rand()/RAND_MAX);
 }
 
-double gaussianCostFunction(double theta) {
+double gaussianCostFunction(double params[], int num_params) {
+	double theta = params[0];
 	double loss = 0;
 	for (int i = 0; i < values_size; i++) {
 		double temp = (theta * values[1][i]) - values[0][i];
 		loss += temp * temp;
 	}
+	printf("%f\t%f\n",theta,loss);
 	return loss;
 	//loss(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
 }
@@ -63,15 +65,9 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 
 	while (step != N-1) { // using a while instead of a for bc i think it will be easier to add burn-in
 		prev_cost = cost_model(params,num_params);
+		//printf("\n%f\t%f\n",prev_cost,params);
 
-
-		// Slightly alter the parameters so we can explore the space
-		// this is poor code, but im not sure ~how~ the space should
-		// be explored, so i've left it as a placeholder for now.
-		// I'm thinking the best way would be to sample a gaussian
-		// with center on the parameter and s.d. something like .05
-
-		// todo update that comment block
+		// todo update with comment block
 
 		double cur_params[num_params];
 		for (int i = 0; i<num_params; i++) {
@@ -81,22 +77,27 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 
 		double cur_cost = cost_model(cur_params,num_params);
 
-		double u = randNegOnetoOne();
+		double u = (randNegOnetoOne()+1)/2;
 		
 		// Acceptance Ratio
 		double alpha = cur_cost / prev_cost;
 
+		//printf("\nalpha\t%f\t%f\n",alpha,u);
+
 		if (alpha > u) { //accepted
+			
 			//memcpy(samples[step+1],cur_params,num_params*sizeof(double));
 			// set params to cur_params
 			memcpy(params,cur_params,num_params*sizeof(double));
 			// set prev_cost to cur_cost
 			prev_cost = cur_cost;
 		} else { // denied
+			printf("denied\n");
 			//memcpy(samples[step+1],samples[step],num_params*sizeof(double));
 		}
 		if (step > burn_in)
-			fprintf(fp,"%f\n",cur_params[0]); // should look over all
+			for (int i = 0; i < num_params; i++)
+				fprintf(fp,"%f\n",cur_params[i]); // should look over all
 		step++;
 	}
 
@@ -124,22 +125,17 @@ int main() {
 
 	// read list of [1:100] with gauss noise
 
-	 FILE *f=fopen("data.txt","r");
+	FILE *f=fopen("data.txt","r");
  
     if(f==NULL){
-    	printf("no file found\n");
+    	printf("no input file found\n");
         return 1;
     }
- 
-    //double values[2][100];        
- 
-	// The below commented code prints the inputs to make sure you have the correct
-	
-    // for(int i = 0; i < 10; ++i) {
-	// 	values[0][i] = i;
-    //     fscanf(f, "%lf",&values[1][i]);
-    //     printf("%d\t%lf\n",i,values[1][i]);
-    //  }
+    for(int i = 0; i < 100; ++i) {
+		values[0][i] = i;
+    	fscanf(f, "%lf",&values[1][i]);
+    	//printf("%d\t%lf\n",i,values[1][i]);
+    }
 
      
  
@@ -147,8 +143,8 @@ int main() {
 
     // mcmc stuff
 
-	double starting_params[] = {100};
-    metHastings(addList,starting_params,1,20000,10000);
+	double starting_params[] = {1};
+    metHastings(gaussianCostFunction,starting_params,1,200,0);
     return 0;
 }
 
