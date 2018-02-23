@@ -31,9 +31,16 @@ double gaussianCostFunction(double params[], int num_params) {
 	double loss = 0;
 	for (int i = 0; i < values_size; i++) {
 		double temp = (theta * values[1][i]) - values[0][i];
-		loss += temp * temp;
+		if (1) {
+			loss += temp * temp;
+		} else {
+			// Absolute value rather than squared
+			temp *= (temp < 0) ? -1 : 1;
+			loss += temp;
+		}
+		
 	}
-	printf("%f\t%f\n",theta,loss);
+	//printf("%f\t%f\n",theta,loss);
 	return loss;
 	//loss(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
 }
@@ -72,7 +79,7 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		double cur_params[num_params];
 		for (int i = 0; i<num_params; i++) {
 			//cur_params[i] = samples[step][i]+randNegOnetoOne();
-			cur_params[i] = params[i] + randNegOnetoOne();
+			cur_params[i] = params[i] + randNegOnetoOne() * 0.1;
 		}
 
 		double cur_cost = cost_model(cur_params,num_params);
@@ -80,7 +87,7 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		double u = (randNegOnetoOne()+1)/2;
 		
 		// Acceptance Ratio
-		double alpha = cur_cost / prev_cost;
+		double alpha = prev_cost / cur_cost;//cur_cost / prev_cost;
 
 		//printf("\nalpha\t%f\t%f\n",alpha,u);
 
@@ -92,7 +99,7 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 			// set prev_cost to cur_cost
 			prev_cost = cur_cost;
 		} else { // denied
-			printf("denied\n");
+			//printf("denied\n");
 			//memcpy(samples[step+1],samples[step],num_params*sizeof(double));
 		}
 		if (step > burn_in)
@@ -125,7 +132,10 @@ int main() {
 
 	// read list of [1:100] with gauss noise
 
-	FILE *f=fopen("data.txt","r");
+	/* SD = 1.0 */
+	//FILE *f=fopen("data.txt","r");
+
+	FILE *f=fopen("mean0sd0_1.txt","r");
  
     if(f==NULL){
     	printf("no input file found\n");
@@ -141,10 +151,9 @@ int main() {
  
     //close(f);
 
-    // mcmc stuff
 
-	double starting_params[] = {1};
-    metHastings(gaussianCostFunction,starting_params,1,200,0);
+	double starting_params[] = {-10};
+    metHastings(gaussianCostFunction,starting_params,1,300000,20000);
     return 0;
 }
 
