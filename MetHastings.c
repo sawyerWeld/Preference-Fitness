@@ -133,9 +133,9 @@ int main() {
 	// read list of [1:100] with gauss noise
 
 	/* SD = 1.0 */
-	//FILE *f=fopen("data.txt","r");
+	FILE *f=fopen("data.txt","r");
 
-	FILE *f=fopen("mean0sd0_1.txt","r");
+	//FILE *f=fopen("mean0sd0_1.txt","r");
  
     if(f==NULL){
     	printf("no input file found\n");
