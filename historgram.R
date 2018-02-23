@@ -6,4 +6,4 @@ for (i in 1:dim(data)[2]) {
   dataNum[,i] <- c(as.numeric(data[[i]]))
 }
 
-hist(dataNum)
+hist(dataNum, breaks = 200, main = "Parameter Estimate")
