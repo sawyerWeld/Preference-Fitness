@@ -152,8 +152,8 @@ int main() {
     //close(f);
 
 
-	double starting_params[] = {-10};
-    metHastings(gaussianCostFunction,starting_params,1,300000,20000);
+	double starting_params[] = {1};
+    metHastings(gaussianCostFunction,starting_params,1,100000,8000);
     return 0;
 }
 
