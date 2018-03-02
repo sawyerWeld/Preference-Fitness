@@ -41,19 +41,18 @@ double gaussianCostFunction(double params[], int num_params) {
 	//loss(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
 }
 
-//int arr1[] = {1,2,3,4,5};
-//struct ordering mu = {arr1[5], 5};
-//mu.len = 5;
-
+// mu is the centroid, the center ordering in the distribution
+// phi is dispersion, how far from mu things can go, like std dev in a gaussian
 // likelihood (succ | mu_hat, phi_hat) is proportional to
 //    Sum over all i in succ (exp (-1 * phi_hat * tau(succ[i],mu_hat)))
-double mallowsCostFunction(double params[], int num_params {
+double mallowsCostFunction(double params[], int num_params) {
 	double mu__ = params[0];
 	double phi = params[1];
 	double sum = 0;
 	for (int i = 0; i < orderings_size; i++) {
 		double temp = exp(-1 * phi * tau(mu,mu));
 	}
+	return sum;
 }
 
 // cost_model : the function to find distribution of
@@ -88,11 +87,15 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		// todo update with comment block
 
 		double cur_params[num_params];
+		// we do this for doubles, need to specify
 		for (int i = 0; i<num_params; i++) {
-			//cur_params[i] = samples[step][i]+randNegOnetoOne();
-			//cur_params[i] = params[i] + randNegOnetoOne() * 0.1;
 			cur_params[i] = params[i] + box_meuller2(.5,0);
 		}
+
+		// for params that are orderings we do this instead
+		// while (weighted_coin() > uniform(0,1))
+		// 	select 2 adjacent alternatives in the preference ordering
+		//  swap them
 
 		double cur_cost = cost_model(cur_params,num_params);
 
@@ -159,9 +162,13 @@ int main() {
     	//printf("%d\t%lf\n",i,values[1][i]);
     }
 
-	int arr = {1,2,3,4,5};
-    struct ordering mu = {arr[], 5};
+	// this doesnt do anything right now, but im thinking about mallows
+	int arr[] = {1,2,3,4,5};
+    struct ordering mu = {arr[5], 5};
 	mu.len = 5;
+	// my here is the starting mu, ie starting_params[0]
+	// dispersion is the second value
+	// params needs to be made into void*
  
     //close(f);
 
