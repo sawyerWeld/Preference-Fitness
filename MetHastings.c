@@ -10,17 +10,6 @@
 double values[2][100];
 int values_size = 100;
 
-//	Placeholder method of same signature as mallows just for testing
-//	Returns the sum of doubles in nums[]
-//	len is the length of nums[]
-double addList(double nums[], int len) {
-	double sum = 0;
-	for(int i = 0; i < len; i++) {
-		sum += nums[i];
-	}
-	return sum;
-}
-
 // normal random [0:1]
 double randNegOnetoOne(){ 
 	return -1 + (2 * (double)rand()/RAND_MAX);
