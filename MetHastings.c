@@ -7,9 +7,15 @@
 #include <time.h>
 #include <unistd.h>
 #include "stddev.c"
+#include "ktau.c"
 
 double values[2][100];
 int values_size = 100;
+
+struct ordering orderings[100];
+int orderings_size = 100;
+
+struct ordering mu;
 
 // normal random [0:1]
 double randNegOnetoOne(){ 
@@ -33,6 +39,21 @@ double gaussianCostFunction(double params[], int num_params) {
 	//printf("%f\t%f\n",theta,loss);
 	return loss;
 	//loss(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
+}
+
+//int arr1[] = {1,2,3,4,5};
+//struct ordering mu = {arr1[5], 5};
+//mu.len = 5;
+
+// likelihood (succ | mu_hat, phi_hat) is proportional to
+//    Sum over all i in succ (exp (-1 * phi_hat * tau(succ[i],mu_hat)))
+double mallowsCostFunction(double params[], int num_params {
+	double mu__ = params[0];
+	double phi = params[1];
+	double sum = 0;
+	for (int i = 0; i < orderings_size; i++) {
+		double temp = exp(-1 * phi * tau(mu,mu));
+	}
 }
 
 // cost_model : the function to find distribution of
@@ -70,7 +91,7 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		for (int i = 0; i<num_params; i++) {
 			//cur_params[i] = samples[step][i]+randNegOnetoOne();
 			//cur_params[i] = params[i] + randNegOnetoOne() * 0.1;
-			cur_params[i] = params[i] + box_meuller2(0.1,0);
+			cur_params[i] = params[i] + box_meuller2(.5,0);
 		}
 
 		double cur_cost = cost_model(cur_params,num_params);
@@ -138,12 +159,14 @@ int main() {
     	//printf("%d\t%lf\n",i,values[1][i]);
     }
 
-     
+	int arr = {1,2,3,4,5};
+    struct ordering mu = {arr[], 5};
+	mu.len = 5;
  
     //close(f);
 
 
-	double starting_params[] = {1};
+	double starting_params[] = {50};
     metHastings(gaussianCostFunction,starting_params,1,1000000,8000);
     return 0;
 }
