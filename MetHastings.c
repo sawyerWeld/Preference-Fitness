@@ -6,6 +6,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include "stddev.c"
 
 double values[2][100];
 int values_size = 100;
@@ -68,7 +69,8 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		double cur_params[num_params];
 		for (int i = 0; i<num_params; i++) {
 			//cur_params[i] = samples[step][i]+randNegOnetoOne();
-			cur_params[i] = params[i] + randNegOnetoOne() * 0.1;
+			//cur_params[i] = params[i] + randNegOnetoOne() * 0.1;
+			cur_params[i] = params[i] + box_meuller2(0.1,0);
 		}
 
 		double cur_cost = cost_model(cur_params,num_params);
@@ -76,7 +78,7 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		double u = (randNegOnetoOne()+1)/2;
 		
 		// Acceptance Ratio
-		double alpha = prev_cost / cur_cost;//cur_cost / prev_cost;
+		double alpha = prev_cost / cur_cost;
 
 		//printf("\nalpha\t%f\t%f\n",alpha,u);
 
@@ -142,7 +144,7 @@ int main() {
 
 
 	double starting_params[] = {1};
-    metHastings(gaussianCostFunction,starting_params,1,100000,8000);
+    metHastings(gaussianCostFunction,starting_params,1,1000000,8000);
     return 0;
 }
 
