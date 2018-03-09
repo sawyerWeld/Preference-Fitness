@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "stddev.c"
 #include "ktau.c"
+#include "paramUtils.c"
 
 double values[2][100];
 int values_size = 100;
@@ -22,6 +23,7 @@ double randNegOnetoOne(){
 	return -1 + (2 * (double)rand()/RAND_MAX);
 }
 
+// loss(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
 double gaussianCostFunction(double params[], int num_params) {
 	double theta = params[0];
 	double loss = 0;
@@ -38,7 +40,6 @@ double gaussianCostFunction(double params[], int num_params) {
 	}
 	//printf("%f\t%f\n",theta,loss);
 	return loss;
-	//loss(theta,x[],y[]) = sum over i ((theta * x[i]) - y[i])
 }
 
 // mu is the centroid, the center ordering in the distribution
@@ -60,7 +61,6 @@ double mallowsCostFunction(double params[], int num_params) {
 // num : the number of parameters
 // runs : how many runs to perform
 // todo: add burn in
-
 void metHastings(double(cost_model)(double[],int), double params_[], int num_params, int runs, int burn_in) {
 
 	int N = runs;
@@ -103,19 +103,11 @@ void metHastings(double(cost_model)(double[],int), double params_[], int num_par
 		
 		// Acceptance Ratio
 		double alpha = prev_cost / cur_cost;
-
-		//printf("\nalpha\t%f\t%f\n",alpha,u);
-
+		
 		if (alpha > u) { //accepted
-			
-			//memcpy(samples[step+1],cur_params,num_params*sizeof(double));
-			// set params to cur_params
 			memcpy(params,cur_params,num_params*sizeof(double));
-			// set prev_cost to cur_cost
 			prev_cost = cur_cost;
 		} else { // denied
-			//printf("denied\n");
-			//memcpy(samples[step+1],samples[step],num_params*sizeof(double));
 		}
 		if (step > burn_in)
 			for (int i = 0; i < num_params; i++)
@@ -162,19 +154,22 @@ int main() {
     	//printf("%d\t%lf\n",i,values[1][i]);
     }
 
+	// close(f);
+
 	// this doesnt do anything right now, but im thinking about mallows
 	int arr[] = {1,2,3,4,5};
     struct ordering mu = {arr[5], 5};
 	mu.len = 5;
-	// my here is the starting mu, ie starting_params[0]
+	// mu here is the starting mu, ie starting_params[0]
 	// dispersion is the second value
 	// params needs to be made into void*
  
-    //close(f);
-
+	void** param_list = {(void*) 10};
+	struct state myparams = {param_list};
+	myparams.len = 1;
 
 	double starting_params[] = {50};
-    metHastings(gaussianCostFunction,starting_params,1,1000000,8000);
+    metHastings(gaussianCostFunction,starting_params,1,10000,8000);
     return 0;
 }
 
