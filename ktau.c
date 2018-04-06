@@ -18,9 +18,9 @@ int tau(struct ordering a, struct ordering b) {
     for (int i = 0; i < a.len; i++) {
 			for (int j = i; j < a.len; j++) { 
 				// every combination of alternatives
-				int first = (a.arr[i] > a.arr[j]) ? 1 : 0;
-				int secnd = (b.arr[i] > b.arr[j]) ? 1 : 0;
-                //printf("%d %d %d %d",a.arr[i],b.arr[j],first,secnd);
+				int first = (a.arr[i] > b.arr[j]) ? 1 : 0;
+				int secnd = (a.arr[j] > b.arr[i]) ? 1 : 0;
+                //printf("%d %d %d %d\n",a.arr[i],b.arr[j],first,secnd);
 				if (first != secnd)
 					count ++;
 			}
@@ -43,7 +43,7 @@ double mallows_prob(struct ordering mode, struct ordering pi, int dispersion) {
 }
 
 
-int main_nvm() {
+int main() {
     int arr1[] = {1,2,3,4,5};
     int arr2[] = {3,4,1,2,5};
     int order_len = 5;
