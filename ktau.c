@@ -43,6 +43,7 @@ double mallows_prob(struct ordering mode, struct ordering pi, int dispersion) {
 }
 
 
+
 int main() {
     int arr1[] = {1,2,3,4,5};
     int arr2[] = {3,4,1,2,5};
