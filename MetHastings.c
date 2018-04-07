@@ -29,16 +29,10 @@ double gaussianCostFunction(double params[], int num_params) {
 	double loss = 0;
 	for (int i = 0; i < values_size; i++) {
 		double temp = (theta * values[1][i]) - values[0][i];
-		if (1) {
-			loss += temp * temp;
-		} else {
-			// Absolute value rather than squared
-			temp *= (temp < 0) ? -1 : 1;
-			loss += temp;
-		}
-		
+		loss += temp * temp;
+		//printf("%d\t%f\n",i,loss);
 	}
-	//printf("%f\t%f\n",theta,loss);
+	
 	return loss;
 }
 
@@ -168,8 +162,9 @@ int main() {
 	struct state myparams = {param_list};
 	myparams.len = 1;
 
-	double starting_params[] = {50};
-    metHastings(gaussianCostFunction,starting_params,1,10000,8000);
+	double starting_params[] = {1}; // set back to 50
+	//printf("%f\n",gaussianCostFunction(starting_params,1));
+    metHastings(gaussianCostFunction,starting_params,1,100000,20000);
     return 0;
 }
 

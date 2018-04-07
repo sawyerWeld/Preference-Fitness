@@ -20,7 +20,7 @@ int tau(struct ordering a, struct ordering b) {
 				// every combination of alternatives
 				int first = (a.arr[i] > b.arr[j]) ? 1 : 0;
 				int secnd = (a.arr[j] > b.arr[i]) ? 1 : 0;
-                //printf("%d %d %d %d\n",a.arr[i],b.arr[j],first,secnd);
+                printf("%d %d \n",first,secnd);
 				if (first != secnd)
 					count ++;
 			}
