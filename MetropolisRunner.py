@@ -1,4 +1,16 @@
 # Migrating Current Thesis work to Python to quicken the development cycle
+# Currrent state:
+#       works just fine for nromal distribution floats
+#       - make sure you send a float not an int
+# Working on:
+#       Need a way to wiggle preference orderings
+#       - I have the math for this
+#       Need a way to generate the data
+#       - prefmine Dlang code, also Lu & Boutillier 2014
+#       Move things to new files probably
+#       How to memoize ktau?
+#
+
 
 import numpy as np
 import itertools
@@ -25,20 +37,6 @@ for i in range(100):
 orderings = np.asarray(orderings)
 
 
-# Kendall Tau distance from ordering a to b or visaversa
-def ktdistance(a, b):
-    if len(a) != len(b):
-        return -1
-    pairs = itertools.combinations(range(len(a)), 2)
-    count = 0
-    for i, j in pairs:
-        first = a[i] - a[j]
-        secnd = b[i] - b[j]
-        if (first * secnd < 0):
-            count += 1
-    return count
-
-
 # @param params - list of params passed from metHastings
 def gaussianCostFunction(params):
     return gaussianHelperFunction(params[0])
@@ -51,6 +49,20 @@ def gaussianHelperFunction(theta):
         temp = (theta * normal_values[i, 1]) - normal_values[i, 0]
         loss += temp * temp
     return loss
+
+
+# Kendall Tau distance from ordering a to b or visaversa
+def ktdistance(a, b):
+    if len(a) != len(b):
+        return -1
+    pairs = itertools.combinations(range(len(a)), 2)
+    count = 0
+    for i, j in pairs:
+        first = a[i] - a[j]
+        secnd = b[i] - b[j]
+        if (first * secnd < 0):
+            count += 1
+    return count
 
 
 def mallowsCostFunction(params):
@@ -69,7 +81,7 @@ def generateCandidate(o):
         # Add a random number
         return o + np.random.normal(0, 0.5)
     elif type(o) is list:
-        return -2
+        return o
         # do some number of swaps
     return -1
 
@@ -117,13 +129,13 @@ def metHastings(cost_model, params, runs, burn_in):
 
 
 starting_params = []
-starting_params.append(1)
+starting_params.append(1.00)
 print("Initial cost:", gaussianCostFunction(starting_params))
-# metHastings(gaussianCostFunction, starting_params, 10000, 2000)
+metHastings(gaussianCostFunction, starting_params, 10000, 2000)
 
 a = [1, 2, 3, 4, 5]
 b = [3, 4, 1, 2, 5]
-print("kt distance:", ktdistance(a, b))
+# print("kt distance:", ktdistance(a, b))
 starting_params = [b, 1]
-print(mallowsCostFunction(starting_params))
-metHastings(mallowsCostFunction, starting_params, 10000, 2000)
+# print(mallowsCostFunction(starting_params))
+# metHastings(mallowsCostFunction, starting_params, 10000, 2000)
