@@ -3,20 +3,17 @@
 #       works just fine for nromal distribution floats
 #       - make sure you send a float not an int
 # Working on:
-#       Need a way to wiggle preference orderings
-#       - I have the math for this
 #       Need a way to generate the data
 #       - prefmine Dlang code, also Lu & Boutillier 2014
 #       Move things to new files probably
-#       How to memoize ktau?
-#
+#       How to cache ktau?
+#       Mallows cost function seems wrong
 
 
 import numpy as np
 import itertools
 import functools
 from random import shuffle
-
 
 # Reading in and formatting data for normal distribution
 # normal_values[i, 0] = i, normal_values[i, 1] = i + std deviate
@@ -65,6 +62,20 @@ def ktdistance(a, b):
     return count
 
 
+def wiggleOrderings(order):
+    # A do()while{} would work better here, not sure how in python
+    a = np.random.randint(len(order))
+    b = np.random.randint(len(order))
+    order[a], order[b] = order[b], order[a]
+    tuning_parameter = 0.5
+    while (tuning_parameter <= np.random.uniform(0.0, 1.0)):
+        a = np.random.randint(len(order))
+        b = np.random.randint(len(order))
+        order[a], order[b] = order[b], order[a]
+        # swap two random ones
+
+
+# How far off from the dataset is our current mu, phi?
 def mallowsCostFunction(params):
     mu = params[0]
     phi = params[1]
@@ -81,8 +92,11 @@ def generateCandidate(o):
         # Add a random number
         return o + np.random.normal(0, 0.5)
     elif type(o) is list:
+        wiggleOrderings(o)
         return o
         # do some number of swaps
+    print(o)
+    print("could not generate candidate")
     return -1
 
 
@@ -107,7 +121,7 @@ def metHastings(cost_model, params, runs, burn_in):
 
         # print(new_params)
         prev_cost = cost_model(params)
-        new_cost = cost_model(new_params)
+        new_cost = cost_model(new_params) + 0.00000001
 
         # print(params, new_params)
 
@@ -122,20 +136,24 @@ def metHastings(cost_model, params, runs, burn_in):
 
         if (step > burn_in):
             for val in params:
-                f.write(str("%.2f\n" % val))
+                if type(val) is float:
+                    f.write(str("%.2f\n" % val))
+                # need to make this order compatible
         step += 1
     print("finished")
     f.close()
 
 
-starting_params = []
-starting_params.append(1.00)
-print("Initial cost:", gaussianCostFunction(starting_params))
-metHastings(gaussianCostFunction, starting_params, 10000, 2000)
+# starting_params = []
+# starting_params.append(1.00)
+# print("Initial cost:", gaussianCostFunction(starting_params))
+# metHastings(gaussianCostFunction, starting_params, 10000, 2000)
 
 a = [1, 2, 3, 4, 5]
 b = [3, 4, 1, 2, 5]
 # print("kt distance:", ktdistance(a, b))
-starting_params = [b, 1]
-# print(mallowsCostFunction(starting_params))
-# metHastings(mallowsCostFunction, starting_params, 10000, 2000)
+starting_params = [b, 1.0]
+print("initial mallows cost: ", mallowsCostFunction(starting_params))
+metHastings(mallowsCostFunction, starting_params, 1000, 200)
+wiggleOrderings(a)
+print(a)
