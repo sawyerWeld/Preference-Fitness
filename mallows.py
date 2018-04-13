@@ -9,12 +9,13 @@ def generateOrdering(order):
     a = np.random.randint(len(order))
     b = np.random.randint(len(order))
     order[a], order[b] = order[b], order[a]
-    tuning_parameter = 0.75
-    while (tuning_parameter <= np.random.uniform(0.0, 1.0)):
+    tuning_parameter = 0.5
+    while (np.random.uniform(0.0, 1.0) >= tuning_parameter):
         a = np.random.randint(len(order))
         b = np.random.randint(len(order))
         order[a], order[b] = order[b], order[a]
         # swap two random ones
+
 
 # Kendall Tau distance from ordering a to b or visaversa
 def ktdistance(a, b):
