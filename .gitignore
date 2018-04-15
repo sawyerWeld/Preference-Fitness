@@ -54,3 +54,5 @@ pythontest.txt
 *.Rhistory
 *.json
 __pycache__/mallows.cpython-36.pyc
+*.pyc
+cosine_vs_ktau.txt

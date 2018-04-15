@@ -140,7 +140,7 @@ def metHastings(cost_model, params, runs, burn_in):
 a = [1, 2, 3, 4, 5]
 b = [3, 4, 1, 2, 5]
 # print("kt distance:", ktdistance(a, b))
-starting_params = [a, 1.0]
+starting_params = [b, 1.0]
 print('initial mallows cost: ', mallowsCostFunction(starting_params))
 metHastings(mallowsCostFunction, starting_params, 1006, 1000)
 # wiggleOrderings(a)
