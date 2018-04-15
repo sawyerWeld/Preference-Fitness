@@ -16,7 +16,7 @@ def cosDistance(a, b):
     numer = np.dot(a, b)
     return 1 - (numer / denom)
 
-a = np.arange(7)
+a = np.arange(8)
 
 perm = list(permutations(a))
 print(len(perm))
