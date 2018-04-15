@@ -52,3 +52,5 @@ Mkfile.old
 dkms.conf
 pythontest.txt
 *.Rhistory
+*.json
+__pycache__/mallows.cpython-36.pyc

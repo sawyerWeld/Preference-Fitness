@@ -74,6 +74,7 @@ def mallowsCostFunction___(params):
         loss += np.exp(-1 * phi * mallows.ktdistance(orderings[i], mu))
     return loss
 
+
 # How far off from the dataset is our current mu, phi?
 def mallowsCostFunction(params):
     mu = params[0]
@@ -93,7 +94,7 @@ def metHastings(cost_model, params, runs, burn_in):
     step = 0
 
     # open some file to print to ?
-    
+
     # f = open("pythontest.txt", "w")
 
     while step != N:
@@ -105,13 +106,11 @@ def metHastings(cost_model, params, runs, burn_in):
 
         # print(new_params)
         prev_cost = cost_model(params)
-        new_cost = cost_model(new_params) + 1  # is this correct?
-
+        new_cost = cost_model(new_params)
         # print(params, new_params)
 
         u = np.random.uniform(0, 1)
-        alpha = prev_cost / new_cost
-       
+        alpha = prev_cost / (new_cost + 1)  # is this correct?
 
         if alpha > u:
             params = list(new_params)
@@ -124,8 +123,8 @@ def metHastings(cost_model, params, runs, burn_in):
                     f.write(str("%.2f\n" % val))
                 # need to make this order compatible
             '''
-            print("Costs: ", "%.2f" % prev_cost, "%.2f" % new_cost)
-            print("alpha, u: ", "%.4f" % alpha, "%.4f" % u)
+            # print("Costs: ", "%.2f" % prev_cost, "%.2f" % new_cost)
+            # print("alpha, u: ", "%.4f" % alpha, "%.4f" % u)
             tup = (params[0], params[1])
             filewrite.append(tup)
         step += 1
@@ -149,4 +148,3 @@ metHastings(mallowsCostFunction, starting_params, 1006, 1000)
 
 for tup in filewrite:
     print(tup[0], tup[1])
-
