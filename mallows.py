@@ -36,7 +36,8 @@ def generateOrdering(order):
 # num is how many orderings
 # N is how long each is
 # eta is acceptance param in range [0.0, 1.0)
-def generateMallowsSet(num, N, eta, centroid = 0):
+# see Lu & Boutillier 2014
+def generateMallowsSet(num, N, eta, centroid=0):
     if centroid == 0:
         centroid = np.arange(N)
     list = []

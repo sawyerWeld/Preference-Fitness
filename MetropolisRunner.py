@@ -5,11 +5,10 @@
 # Working on:
 #       Need a way to generate the data
 #       - prefmine Dlang code, also Lu & Boutillier 2014
-            # DONE
 #       Move things to new files probably
-            # done?
+# done?
 #       How to cache ktau?
-            # was a huge improvement for floats
+#       was a huge improvement for floats
 #       Mallows cost function seems wrong
 
 
@@ -29,6 +28,7 @@ normal_values = np.column_stack((labels, stddeviates))
 orderings = mallows.generateMallowsSet(100, 5, 0.5)
 
 filewrite = []  # this is a placeholder for writing to a file
+
 
 # @param params - list of tparams passed from metHastings
 def gaussianCostFunction(params):
@@ -96,7 +96,6 @@ def metHastings(cost_model, params, runs, burn_in):
 
         u = np.random.uniform(0, 1)
         alpha = prev_cost / new_cost
-       
 
         if alpha > u:
             params = list(new_params)
@@ -111,8 +110,8 @@ def metHastings(cost_model, params, runs, burn_in):
             '''
             print("Costs: ", "%.2f" % prev_cost, "%.2f" % new_cost)
             print("alpha, u: ", "%.4f" % alpha, "%.4f" % u)
-            #tup = (params[0], params[1])
-            #filewrite.append(tup)
+            # tup = (params[0], params[1])
+            # filewrite.append(tup)
         step += 1
     print("finished")
     # f.close()
@@ -134,5 +133,3 @@ if (False):
     # print(a)
     for tup in filewrite:
         print(tup[0], tup[1])
-
-
