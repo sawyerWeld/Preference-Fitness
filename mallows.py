@@ -21,7 +21,7 @@ def ktdistance(a, b):
 # Generates a new candidate given current ordering
 def generateOrdering(order):
     # A do()while{} would work better here, not sure how in python
-    tuning_parameter = 0.5
+    tuning_parameter = 0.1
     a = np.random.randint(len(order))
     b = np.random.randint(len(order))
     order[a], order[b] = order[b], order[a]
@@ -30,6 +30,7 @@ def generateOrdering(order):
         b = np.random.randint(len(order))
         order[a], order[b] = order[b], order[a]
         # swap two random ones
+    return order
 
 
 # Generate a set of mallows orderings
@@ -54,5 +55,6 @@ def generateMallowsSet(num, N, eta, centroid=0):
         list.append(ord)
     return list
 
-# print(generateMallowsSet(10,5,0.5))
+centroid = [3, 4, 1, 2, 5]
+# print(generateMallowsSet(10,5,0.1))
 

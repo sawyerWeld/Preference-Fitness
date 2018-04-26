@@ -57,3 +57,5 @@ __pycache__/mallows.cpython-36.pyc
 *.pyc
 cosine_vs_ktau.txt
 *.Rhistory
+.vscode/*
+__pycache__/mallows.cypthon-36.pyc

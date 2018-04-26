@@ -1,16 +1,3 @@
-# Migrating Current Thesis work to Python to quicken the development cycle
-# Currrent state:
-#       works just fine for nromal distribution floats
-#       - make sure you send a float not an int
-# Working on:
-#       Need a way to generate the data
-#       - prefmine Dlang code, also Lu & Boutillier 2014
-#       Move things to new files probably
-# done?
-#       How to cache ktau?
-#       was a huge improvement for floats
-#       Mallows cost function seems wrong
-
 
 import numpy as np
 import functools
@@ -25,7 +12,7 @@ stddeviates = stddeviates[0: num_normals]
 labels = np.arange(num_normals)
 normal_values = np.column_stack((labels, stddeviates))
 
-orderings = mallows.generateMallowsSet(100, 5, 0.5)
+orderings = mallows.generateMallowsSet(100, 5, 0.1)
 
 filewrite = []  # this is a placeholder for writing to a file
 
@@ -51,7 +38,8 @@ def generateCandidate(o):
         # Add a random number
         return o + np.random.normal(0, 0.5)
     elif type(o) is list:
-        mallows.generateOrdering(o)
+        o = mallows.generateOrdering(o)
+        
         return o
         # do some number of swaps
     print(o)
@@ -65,7 +53,7 @@ def mallowsCostFunction(params):
     phi = params[1]
     loss = 0
     for i in range(len(orderings)):
-        loss += (phi * mallows.ktdistance(orderings[i], mu))
+        loss += mallows.ktdistance(orderings[i], mu) # * phi
     return loss
 
 
@@ -77,8 +65,6 @@ def metHastings(cost_model, params, runs, burn_in):
     N = runs
     step = 0
 
-    # open some file to print to ?
-    
     # f = open("pythontest.txt", "w")
 
     while step != N:
@@ -88,11 +74,8 @@ def metHastings(cost_model, params, runs, burn_in):
         for i in range(len(new_params)):
             new_params[i] = generateCandidate(new_params[i])
 
-        # print(new_params)
         prev_cost = cost_model(params)
-        new_cost = cost_model(new_params) + 1  # is this correct?
-
-        # print(params, new_params)
+        new_cost = cost_model(new_params)
 
         u = np.random.uniform(0, 1)
         alpha = prev_cost / new_cost
@@ -108,28 +91,29 @@ def metHastings(cost_model, params, runs, burn_in):
                     f.write(str("%.2f\n" % val))
                 # need to make this order compatible
             '''
-            print("Costs: ", "%.2f" % prev_cost, "%.2f" % new_cost)
-            print("alpha, u: ", "%.4f" % alpha, "%.4f" % u)
-            # tup = (params[0], params[1])
-            # filewrite.append(tup)
+            # print("Costs: ", "%.2f" % prev_cost, "%.2f" % new_cost)
+            # print("alpha, u: ", "%.4f" % alpha, "%.4f" % u)
+            tup = (list(params[0]), params[1])
+            filewrite.append(tup)
         step += 1
     print("finished")
     # f.close()
 
-if (True):
+randombool = False
+if (randombool):
     starting_params = []
     starting_params.append(1.00)
     print("Initial cost:", gaussianCostFunction(starting_params))
-    metHastings(gaussianCostFunction, starting_params, 10006, 10000)
-
-if (False):
+    metHastings(gaussianCostFunction, starting_params, 10006, 1000)
+else:
     a = [1, 2, 3, 4, 5]
+    start = []
+    start[:] = a
     b = [3, 4, 1, 2, 5]
     # print("kt distance:", ktdistance(a, b))
     starting_params = [a, 1.0]
     print('initial mallows cost: ', mallowsCostFunction(starting_params))
-    metHastings(mallowsCostFunction, starting_params, 1006, 1000)
-    # wiggleOrderings(a)
-    # print(a)
+    metHastings(mallowsCostFunction, starting_params, 100, -1)
+    # print(start)
     for tup in filewrite:
-        print(tup[0], tup[1])
+       print(tup[0], tup[1])
