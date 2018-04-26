@@ -53,7 +53,7 @@ def mallowsCostFunction(params):
     phi = params[1]
     loss = 0
     for i in range(len(orderings)):
-        loss += mallows.ktdistance(orderings[i], mu) # * phi
+        loss += mallows.ktdistance(orderings[i], mu) * phi
     return loss
 
 
