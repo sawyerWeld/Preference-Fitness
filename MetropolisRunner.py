@@ -39,7 +39,7 @@ def generateCandidate(o):
         return o + np.random.normal(0, 0.5)
     elif type(o) is list:
         o = mallows.generateOrdering(o)
-        
+
         return o
         # do some number of swaps
     print(o)
@@ -116,4 +116,4 @@ else:
     metHastings(mallowsCostFunction, starting_params, 100, -1)
     # print(start)
     for tup in filewrite:
-       print(tup[0], tup[1])
+        print(tup[0], tup[1])
