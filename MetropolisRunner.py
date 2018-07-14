@@ -4,6 +4,8 @@ import functools
 from random import shuffle
 import mallows
 
+mode = 'Gaussian'
+
 # Reading in and formatting data for normal distribution
 # normal_values[i, 0] = i, normal_values[i, 1] = i + std deviate
 num_normals = 100
@@ -89,7 +91,7 @@ def metHastings(cost_model, params, runs, burn_in):
             for val in params:
                 if type(val) is float:
                     f.write(str("%.2f\n" % val))
-                # need to make this order compatible
+                # need to make this ordering compatible
             '''
             # print("Costs: ", "%.2f" % prev_cost, "%.2f" % new_cost)
             # print("alpha, u: ", "%.4f" % alpha, "%.4f" % u)
@@ -99,13 +101,12 @@ def metHastings(cost_model, params, runs, burn_in):
     print("finished")
     # f.close()
 
-randombool = False
-if (randombool):
+if (mode == 'Gaussian'):
     starting_params = []
     starting_params.append(1.00)
     print("Initial cost:", gaussianCostFunction(starting_params))
     metHastings(gaussianCostFunction, starting_params, 10006, 1000)
-else:
+elif (mode == 'Mallows'):
     a = [1, 2, 3, 4, 5]
     start = []
     start[:] = a
