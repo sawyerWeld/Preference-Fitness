@@ -99,7 +99,7 @@ def metHastings(cost_model, params, runs, burn_in):
             filewrite.append(tup)
         step += 1
     print("finished")
-    # f.close()
+    # f.close() 
 
 if (mode == 'Gaussian'):
     starting_params = []

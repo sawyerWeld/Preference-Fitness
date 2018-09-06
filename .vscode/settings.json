@@ -2,6 +2,6 @@
     "files.associations": {
         "stdio.h": "c"
     },
-    "python.pythonPath": "C:\\Users\\sawye\\Anaconda3\\python.exe",
+    "python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe",
     "python.linting.pylintEnabled": false
 }
