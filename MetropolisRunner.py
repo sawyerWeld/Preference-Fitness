@@ -1,4 +1,3 @@
-
 import numpy as np
 import functools
 from random import shuffle
@@ -19,11 +18,12 @@ orderings = mallows.generateMallowsSet(100, 5, 0.1)
 filewrite = []  # this is a placeholder for writing to a file
 
 
-# @param params - list of tparams passed from metHastings
+# params - list of params passed from metHastings
 def gaussianCostFunction(params):
     return gaussianHelperFunction(params[0])
 
 
+# used by the cost function
 @functools.lru_cache(maxsize=128)
 def gaussianHelperFunction(theta):
     loss = 0
@@ -73,6 +73,7 @@ def metHastings(cost_model, params, runs, burn_in):
         new_params = []
         new_params[:] = params
 
+        # Set the values of the new candidate
         for i in range(len(new_params)):
             new_params[i] = generateCandidate(new_params[i])
 
@@ -95,17 +96,20 @@ def metHastings(cost_model, params, runs, burn_in):
             '''
             # print("Costs: ", "%.2f" % prev_cost, "%.2f" % new_cost)
             # print("alpha, u: ", "%.4f" % alpha, "%.4f" % u)
-            tup = (list(params[0]), params[1])
+            tup = tuple(params)
+            print(tup)
             filewrite.append(tup)
         step += 1
     print("finished")
     # f.close() 
+
 
 if (mode == 'Gaussian'):
     starting_params = []
     starting_params.append(1.00)
     print("Initial cost:", gaussianCostFunction(starting_params))
     metHastings(gaussianCostFunction, starting_params, 10006, 1000)
+        
 elif (mode == 'Mallows'):
     a = [1, 2, 3, 4, 5]
     start = []
@@ -114,7 +118,7 @@ elif (mode == 'Mallows'):
     # print("kt distance:", ktdistance(a, b))
     starting_params = [a, 1.0]
     print('initial mallows cost: ', mallowsCostFunction(starting_params))
-    metHastings(mallowsCostFunction, starting_params, 100, -1)
+    metHastings(mallowsCostFunction, starting_params, 1000, -1)
     # print(start)
     for tup in filewrite:
-        print(tup[0], tup[1])
+        print(tup)

@@ -1,7 +1,6 @@
 #setwd("~/Desktop/thesis/Thesis") # Laptop
-setwd("C:/Thesis/Thesis") # Desktop
 
-data <- read.table("pythontest.txt",header = FALSE)
+data <- read.table("data.txt",header = FALSE)
 
 Dispersion <- matrix(data = NA, nrow = dim(data)[1], ncol = dim(data)[2])
 
