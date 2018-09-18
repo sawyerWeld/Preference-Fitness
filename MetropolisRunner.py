@@ -1,6 +1,7 @@
 import numpy as np
 import functools
 from random import shuffle
+from tqdm import tqdm
 import time
 import mallows
 import gauss
@@ -18,8 +19,7 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
     lowest_cost = 1000000000000
     lowest_cost_params = None
 
-    tick = time.time()
-    while step < N:
+    for step in tqdm(range(N)):
         # Set the values of the new candidate
         new_params = gen_candidate(list(params))
 
@@ -34,7 +34,7 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
             prev_cost = new_cost
 
         if (step > burn_in):
-            tup = tuple(params)
+            tup = [tuple(params), prev_cost]
             filewrite.append(tup)
 
         if prev_cost < lowest_cost:
@@ -43,8 +43,6 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
 
         step += 1
 
-    tock = time.time()
-    print('~Run Seconds:', tock-tick)
     print('Minimum cost:', lowest_cost)
     print('~Best params:', lowest_cost_params)
     print("Finished metropolis process")
@@ -64,22 +62,22 @@ def run_gaussian():
     metHastings(gauss.costFunction, starting_params, gauss.genCandidate, normal_values, 10000, 1000)
     with open('estimate_data.txt', 'w') as file:
         for tup in filewrite:
-            for val in tup:
-                file.write(str(val) + '\n')
+            file.write(str(tup[0][0]) + '\n')
     print('Finished writing to file')
 
 
 def run_mallows():
     order_length = 5
-    orderings = mallows.generateMallowsSet(2, order_length, 0.5)
+    orderings = mallows.generateMallowsSet(100, order_length, 0.7, centroid=[4,3,2,1,0])
     a = list(range(1,order_length+1))
     # print(orderings)
     starting_params = [a, 1.0]
     print('initial mallows cost: ', mallows.costFunction(starting_params, orderings))
-    metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, 10, -1)
+    metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, 100000, 10000)
     with open('mallows_data.txt', 'w') as file:
-        for tup in filewrite:
-            file.write(str(tup[0]) + '\n')
+        for line in filewrite:
+            ordering = ''.join(map(str, line[0][0]))
+            file.write(ordering + '\t' + str(line[1]) + '\n')
     print('Finished writing to file')
 
 # run_gaussian()
