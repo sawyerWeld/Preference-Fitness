@@ -17,7 +17,7 @@ def ktdistance(a, b):
             count += 1
     return count
 
-def mallowsCandidate(tup):
+def genCandidate(tup):
     order = tup[0]
     num = tup[1]
     new_order = generateOrdering(order)
@@ -39,12 +39,16 @@ def generateOrdering(order):
     return order
 
 # How far off from the dataset is our current mu, phi?
-def mallowsCostFunction(params):
+def costFunction(params, dataset):
+    orderings = dataset
     mu = params[0]
     phi = params[1]
     loss = 0
     for i in range(len(orderings)):
-        loss += mallows.ktdistance(orderings[i], mu) * phi
+        loss += ktdistance(orderings[i], mu) # * phi
+        # Simply multiplying by phi does not make sense
+        # I got it from some piece of literature, but of course it makes
+        # the optimal phi approach 0
     return loss
 
 # Generate a set of mallows orderings
