@@ -19,12 +19,13 @@ def ktdistance(a, b):
 def genCandidate(tup):
     order = tup[0]
     num = tup[1]
-    new_order = list(generateOrdering(order))
+    new_order = generateOrdering(order)
     new_num = num + np.random.normal(0, 0.5)
     return ((new_order, new_num))
 
 # Generates a new candidate given current ordering
-def generateOrdering(order):
+def generateOrdering(inp):
+    order = list(inp)
     # A do()while{} would work better here, not sure how in python
     tuning_parameter = 0.9
     a = np.random.randint(len(order))
