@@ -17,6 +17,12 @@ def ktdistance(a, b):
             count += 1
     return count
 
+def mallowsCandidate(tup):
+    order = tup[0]
+    num = tup[1]
+    new_order = generateOrdering(order)
+    new_num = num + np.random.normal(0, 0.5)
+    return ((new_order, new_num))
 
 # Generates a new candidate given current ordering
 def generateOrdering(order):
@@ -32,6 +38,14 @@ def generateOrdering(order):
         # swap two random ones
     return order
 
+# How far off from the dataset is our current mu, phi?
+def mallowsCostFunction(params):
+    mu = params[0]
+    phi = params[1]
+    loss = 0
+    for i in range(len(orderings)):
+        loss += mallows.ktdistance(orderings[i], mu) * phi
+    return loss
 
 # Generate a set of mallows orderings
 # num is how many orderings

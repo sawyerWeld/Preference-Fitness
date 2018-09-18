@@ -1,6 +1,7 @@
 #setwd("~/Desktop/thesis/Thesis") # Laptop
+setwd("~/GitHub/Thesis")
 
-data <- read.table("data.txt",header = FALSE)
+data <- read.table("mallows_data.txt",header = FALSE)
 
 Dispersion <- matrix(data = NA, nrow = dim(data)[1], ncol = dim(data)[2])
 
@@ -9,3 +10,4 @@ for (i in 1:dim(data)[2]) {
 }
 
 hist(Dispersion, breaks = 200, main = "Parameter Estimate")
+

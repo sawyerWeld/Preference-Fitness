@@ -3,8 +3,6 @@ import functools
 from random import shuffle
 import mallows
 
-mode = 'Gaussian'
-
 # Reading in and formatting data for normal distribution
 # normal_values[i, 0] = i, normal_values[i, 1] = i + std deviate
 num_normals = 100
@@ -22,6 +20,8 @@ filewrite = []  # this is a placeholder for writing to a file
 def gaussianCostFunction(params):
     return gaussianHelperFunction(params[0])
 
+def generateGauss(input):
+    return input + np.random.normal(0, 0.5)
 
 # used by the cost function
 @functools.lru_cache(maxsize=128)
@@ -31,22 +31,6 @@ def gaussianHelperFunction(theta):
         temp = (theta * normal_values[i, 1]) - normal_values[i, 0]
         loss += temp * temp
     return loss
-
-
-# Helper of the metropolis algorithm. Gnerates get new candidate params
-# Previously known as 'wiggle'
-def generateCandidate(o):
-    if type(o) is float:
-        # Add a random number
-        return o + np.random.normal(0, 0.5)
-    elif type(o) is list:
-        o = mallows.generateOrdering(o)
-
-        return o
-        # do some number of swaps
-    print(o)
-    print("could not generate candidate")
-    return -1
 
 
 # How far off from the dataset is our current mu, phi?
@@ -63,19 +47,16 @@ def mallowsCostFunction(params):
 # params     - starting params to iterate from
 # runs       - how many times to iterate, includes burn in
 # burn_in    - iterations not to record, necessary for markov chains
-def metHastings(cost_model, params, runs, burn_in):
+def metHastings(cost_model, params, gen_candidate, runs, burn_in):
     N = runs
     step = 0
-
-    # f = open("pythontest.txt", "w")
 
     while step != N:
         new_params = []
         new_params[:] = params
 
         # Set the values of the new candidate
-        for i in range(len(new_params)):
-            new_params[i] = generateCandidate(new_params[i])
+        new_params = gen_candidate(new_params)
 
         prev_cost = cost_model(params)
         new_cost = cost_model(new_params)
@@ -88,37 +69,39 @@ def metHastings(cost_model, params, runs, burn_in):
             prev_cost = new_cost
 
         if (step > burn_in):
-            '''
-            for val in params:
-                if type(val) is float:
-                    f.write(str("%.2f\n" % val))
-                # need to make this ordering compatible
-            '''
             # print("Costs: ", "%.2f" % prev_cost, "%.2f" % new_cost)
             # print("alpha, u: ", "%.4f" % alpha, "%.4f" % u)
             tup = tuple(params)
-            print(tup)
+            # print(tup)
             filewrite.append(tup)
         step += 1
-    print("finished")
-    # f.close() 
+    print("finished metropolis process")
 
 
-if (mode == 'Gaussian'):
+def run_gaussian():
     starting_params = []
     starting_params.append(1.00)
     print("Initial cost:", gaussianCostFunction(starting_params))
-    metHastings(gaussianCostFunction, starting_params, 10006, 1000)
-        
-elif (mode == 'Mallows'):
-    a = [1, 2, 3, 4, 5]
+    metHastings(gaussianCostFunction, starting_params, generateGauss, 10006, 1000)
+    with open('estimate_data.txt', 'w') as file:
+        for tup in filewrite:
+            for val in tup:
+                file.write(str(val) + '\n')
+    print('finished writing to file')
+
+
+def run_mallows():
+    a = [1, 2, 3]
     start = []
-    start[:] = a
+    start = list(a)
     b = [3, 4, 1, 2, 5]
-    # print("kt distance:", ktdistance(a, b))
     starting_params = [a, 1.0]
     print('initial mallows cost: ', mallowsCostFunction(starting_params))
-    metHastings(mallowsCostFunction, starting_params, 1000, -1)
-    # print(start)
-    for tup in filewrite:
-        print(tup)
+    metHastings(mallowsCostFunction, starting_params, mallows.mallowsCandidate, 1000, 100)
+    with open('mallows_data.txt', 'w') as file:
+        for tup in filewrite:
+            file.write(str(tup[1]) + '\n')
+    print('finished writing to file')
+
+# run_gaussian()
+run_mallows()
