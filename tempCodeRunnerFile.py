@@ -1,2 +1,1 @@
-
-            for char in parts[0]:
+i)/sum{j=i,j=N}(λ(j)))

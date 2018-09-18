@@ -13,6 +13,7 @@ def costFunction(params, data):
     global dataset
     if not dataset_defined:
         dataset = data
+        dataset_defined = True
     return gaussianHelperFunction(params[0])
 
 def genCandidate(num):
