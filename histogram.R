@@ -1,7 +1,7 @@
 #setwd("~/Desktop/thesis/Thesis") # Laptop
 setwd("~/GitHub/Thesis")
 
-data <- read.table("mallows_data.txt",header = FALSE)
+data <- read.table("estimate_data.txt",header = FALSE)
 
 Dispersion <- matrix(data = NA, nrow = dim(data)[1], ncol = dim(data)[2])
 

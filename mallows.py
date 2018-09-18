@@ -1,8 +1,7 @@
-# Helper function for MetropolisRunner
+# Helper functions for MetropolisRunner
 
 import numpy as np
 import itertools
-
 
 # Kendall Tau distance from ordering a to b or visaversa
 def ktdistance(a, b):
@@ -20,14 +19,14 @@ def ktdistance(a, b):
 def genCandidate(tup):
     order = tup[0]
     num = tup[1]
-    new_order = generateOrdering(order)
+    new_order = list(generateOrdering(order))
     new_num = num + np.random.normal(0, 0.5)
     return ((new_order, new_num))
 
 # Generates a new candidate given current ordering
 def generateOrdering(order):
     # A do()while{} would work better here, not sure how in python
-    tuning_parameter = 0.1
+    tuning_parameter = 0.9
     a = np.random.randint(len(order))
     b = np.random.randint(len(order))
     order[a], order[b] = order[b], order[a]
@@ -72,7 +71,3 @@ def generateMallowsSet(num, N, eta, centroid=0):
                     break
         list.append(ord)
     return list
-
-centroid = [3, 4, 1, 2, 5]
-# print(generateMallowsSet(10,5,0.1))
-
