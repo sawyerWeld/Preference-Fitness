@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 occurances = {}
 costs = {}
 
-def makeFrequencyTable():
-    with open('mallows_data.txt', 'r') as file:
+def makeFrequencyTable(filename):
+    with open(filename, 'r') as file:
         data = file.readlines()
         for line in data:
             parts = line.split()
@@ -29,7 +29,7 @@ def makeFrequencyTable():
                 occurances[ordering] = 1
                 costs[ordering] = cost
 
-makeFrequencyTable()
+makeFrequencyTable('mallows_data.txt')
 
 costOccurances = []
 
@@ -42,7 +42,7 @@ makeCostVsOccurances()
 
 x, y = zip(*costOccurances)
 plt.scatter(x,y)
-plt.title('Mallow\'s Distribution. N=100k Burnout=10k')
-plt.xlabel('Kendall\'s Tau Distance')
+# plt.title('Mallow\'s Distribution. N=1M Burnout=50k')
+plt.xlabel('Cost Function')
 plt.ylabel('Frequency')
 plt.show()

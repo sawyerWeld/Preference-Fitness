@@ -6,7 +6,7 @@ weights_defined = False
 weights = -1
 
 def genCandidate(tup):
-    return mallows.genCandidate(tup)
+    return [mallows.generateOrdering(tup[0])]
 
 
 # Here is where I need to calculate prior values
@@ -47,8 +47,8 @@ def costFunction(params, data):
     if not weights_defined:
         defineWeights(data)
         weights_defined = True
-
-    ordering = list(params)
+        
+    ordering = list(params[0])
     product = 1
     for i in range(len(ordering)-1):
         num = weights[i]
@@ -57,10 +57,3 @@ def costFunction(params, data):
             denom += weights[j]
         product *= (num/denom)
     return 1.0 / product
-
-data = [np.arange(5), np.arange(5)]
-defineWeights(data)
-print(weights)
-
-
-
