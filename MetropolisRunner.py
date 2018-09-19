@@ -30,6 +30,9 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
         u = np.random.uniform(0, 1)
         alpha = prev_cost / new_cost
 
+        print(params, prev_cost)
+        print(new_params, new_cost)
+
         if alpha > u:
             params = new_params
             prev_cost = new_cost
@@ -83,12 +86,12 @@ def run_mallows():
 
 
 def run_plackettluce():
-    order_length = 10
-    orderings = mallows.generateMallowsSet(100, order_length, 0.4, centroid=[9,8,7,6,5,4,3,2,1,0])
-    a = [1,2,3,4,5,6,7,8,9]
+    order_length = 5
+    orderings = mallows.generateMallowsSet(100, order_length, 0.4, centroid=[4,3,2,1,0])
+    a = [1,2,3,4,5]
     starting_params = [a]
     print('initial P-L cost: ', pl.costFunction([a], orderings))
-    metHastings(pl.costFunction, starting_params, pl.genCandidate, orderings, 100000, 50000)
+    metHastings(pl.costFunction, starting_params, pl.genCandidate, orderings, 10, -1)
     with open('PL_data.txt', 'w') as file:
         for line in filewrite:
             ordering = ''.join(map(str, line[0][0]))
