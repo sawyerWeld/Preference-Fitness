@@ -5,7 +5,7 @@ from tqdm import tqdm
 import time
 import mallows
 import gauss
-import plackettluce as pl
+import plackettluce_depr as pl2
 
 
 filewrite = []  # this is a placeholder for writing to a file
@@ -17,7 +17,7 @@ filewrite = []  # this is a placeholder for writing to a file
 def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
     N = runs
     step = 0
-    lowest_cost = 1000000000000
+    lowest_cost = 1000000000000 # How get max int in python?
     lowest_cost_params = None
 
     for step in tqdm(range(N)):
@@ -85,21 +85,27 @@ def run_mallows():
             file.write(ordering + '\t' + str(line[1]) + '\n')
     print('Finished writing to file')
 
-
-def run_plackettluce():
+# This method is deprecated
+# I did not understand the goal and was iterating over rankings to find the one
+# that was most probable with the plackett luce model. Instead I should have been
+# finding the set of weights with highest probability to procure the given dataset.
+# My attempt at this is run_placettluce()
+def run_plackettluce_depr():
     order_length = 5
     orderings = mallows.generateMallowsSet(100, order_length, 0.5, centroid=[4,3,2,1,0])
     a = [4, 3, 2, 1, 0]
     starting_params = [a]
-    print('initial P-L cost: ', pl.costFunction([a], orderings))
-    metHastings(pl.costFunction, starting_params, pl.genCandidate, orderings, 1000000, 50000)
+    print('initial P-L cost: ', pl2.costFunction([a], orderings))
+    metHastings(pl2.costFunction, starting_params, pl2.genCandidate, orderings, 1000000, 50000)
     with open('PL_data.txt', 'w') as file:
         for line in filewrite:
             ordering = ''.join(map(str, line[0][0]))
             file.write(ordering + '\t' + str(line[1]) + '\n')
     print('Finished writing to file')
 
+def run_plackettluce():
+    pass
 
 # run_gaussian()
 # run_mallows()
-run_plackettluce()
+run_plackettluce_depr()
