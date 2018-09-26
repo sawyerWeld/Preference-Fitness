@@ -2,10 +2,12 @@ import numpy as np
 import functools
 from random import shuffle
 from tqdm import tqdm
+import rankutils
 import time
 import mallows
 import gauss
 import plackettluce_depr as pl2
+import plackettluce as pl
 
 
 filewrite = []  # this is a placeholder for writing to a file
@@ -66,7 +68,7 @@ def run_gaussian():
     starting_params = [1.00]
     print("Initial cost:", gauss.costFunction(starting_params, normal_values))
     metHastings(gauss.costFunction, starting_params, gauss.genCandidate, normal_values, 10000, 1000)
-    with open('estimate_data.txt', 'w') as file:
+    with open('data_output/estimate_data.txt', 'w') as file:
         for tup in filewrite:
             file.write(str(tup[0][0]) + '\n')
     print('Finished writing to file')
@@ -78,8 +80,8 @@ def run_mallows():
     a = list(range(1,order_length+1))
     starting_params = [a, 1.0]
     print('initial mallows cost: ', mallows.costFunction(starting_params, orderings))
-    metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, 10, 0)
-    with open('mallows_data.txt', 'w') as file:
+    metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, 1000, 0)
+    with open('data_output/mallows_data.txt', 'w') as file:
         for line in filewrite:
             ordering = ''.join(map(str, line[0][0]))
             file.write(ordering + '\t' + str(line[1]) + '\n')
@@ -87,7 +89,7 @@ def run_mallows():
 
 # This method is deprecated
 # I did not understand the goal and was iterating over rankings to find the one
-# that was most probable with the plackett luce model. Instead I should have been
+# that was most probable with the give plackett luce weights. Instead, I should have been
 # finding the set of weights with highest probability to procure the given dataset.
 # My attempt at this is run_placettluce()
 def run_plackettluce_depr():
@@ -104,8 +106,18 @@ def run_plackettluce_depr():
     print('Finished writing to file')
 
 def run_plackettluce():
-    pass
+    # First step: Produce a set of weights as a starting param
+    initial = pl.initialWeights(N = 5)
+    data = pl.uniformRandomDataset(5, 100)
+    print('initial P-L cost:', pl.costFunction(initial, data))
+    metHastings(pl.costFunction, initial, pl.genCandidateTransfer, data, 100, -1)
+    with open('data_output/PL-data.txt', 'w') as file:
+        for i in tqdm(range(len(filewrite))):
+            line = filewrite[i]
+            rank = rankutils.listtostring(line[0], delim=' ')
+            file.write(rank + '\t' + str(line[1]) + '\n')
+    print('Finished writing to file')
 
 # run_gaussian()
 # run_mallows()
-run_plackettluce_depr()
+run_plackettluce()

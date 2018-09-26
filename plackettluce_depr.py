@@ -1,3 +1,7 @@
+##############
+# DEPRECATED #
+##############
+
 # functions for estimating parameters of plackett-luce distributions
 import mallows
 import numpy as np
