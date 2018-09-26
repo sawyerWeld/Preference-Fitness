@@ -72,3 +72,7 @@ def generateMallowsSet(num, N, eta, centroid=0):
                     break
         list.append(ord)
     return list
+
+# test_set = generateMallowsSet(5, 10, 0.3, centroid=[9,8,7,6,5,4,3,2,1,0])
+# for o in test_set:
+#     print(o)

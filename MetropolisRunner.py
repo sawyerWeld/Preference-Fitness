@@ -30,12 +30,14 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
         u = np.random.uniform(0, 1)
         alpha = prev_cost / new_cost
 
-        print(params, prev_cost)
-        print(new_params, new_cost)
+        # print(params, prev_cost)
+        # print(new_params, new_cost)
 
         if alpha > u:
+            # print( params, prev_cost, new_params, new_cost, alpha, u)
             params = new_params
             prev_cost = new_cost
+            
 
         if (step > burn_in):
             tup = [tuple(params), prev_cost]
@@ -74,10 +76,9 @@ def run_mallows():
     order_length = 5
     orderings = mallows.generateMallowsSet(100, order_length, 0.4, centroid=[4,3,2,1,0])
     a = list(range(1,order_length+1))
-    # print(orderings)
     starting_params = [a, 1.0]
     print('initial mallows cost: ', mallows.costFunction(starting_params, orderings))
-    metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, 100000, 1000)
+    metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, 10, 0)
     with open('mallows_data.txt', 'w') as file:
         for line in filewrite:
             ordering = ''.join(map(str, line[0][0]))
@@ -87,11 +88,11 @@ def run_mallows():
 
 def run_plackettluce():
     order_length = 5
-    orderings = mallows.generateMallowsSet(100, order_length, 0.4, centroid=[4,3,2,1,0])
-    a = [1,2,3,4,5]
+    orderings = mallows.generateMallowsSet(100, order_length, 0.5, centroid=[4,3,2,1,0])
+    a = [4, 3, 2, 1, 0]
     starting_params = [a]
     print('initial P-L cost: ', pl.costFunction([a], orderings))
-    metHastings(pl.costFunction, starting_params, pl.genCandidate, orderings, 10, -1)
+    metHastings(pl.costFunction, starting_params, pl.genCandidate, orderings, 1000000, 50000)
     with open('PL_data.txt', 'w') as file:
         for line in filewrite:
             ordering = ''.join(map(str, line[0][0]))

@@ -1,6 +1,8 @@
 # functions for estimating parameters of plackett-luce distributions
 import mallows
 import numpy as np
+import itertools
+import tqdm 
 
 weights_defined = False
 weights = -1
@@ -14,7 +16,7 @@ def genCandidate(tup):
 # Been reading Hinderson, Kirrane (2018)
 
 # Here is my attempted method:
-# Sum the ranking that each alternative received in each ordering
+# Sum the rank that each alternative received in each ordering
 # let D_i = the ith ordering in our dataset
 # let α_ni = the ranking alternative n in D_i
 # sums[n] = [ sum{i=0,i=|D|}(α_ni) for all i ]
@@ -27,11 +29,9 @@ def defineWeights(dataset):
         for i in range(len(ranking)):
             place = ranking[i]
             sums[place] += i + 1
-    inverted = np.zeros(N)
-    for i in range(len(sums)):
-        inverted[i] = 1.0 / sums[i]
+    sums = normalize(sums)
     global weights
-    weights = normalize(inverted)
+    weights = sums
 
 
 def normalize(vector):
@@ -49,11 +49,28 @@ def costFunction(params, data):
         weights_defined = True
         
     ordering = list(params[0])
-    product = 1
+    return costFunctionHelper(ordering, data)
+
+def costFunctionHelper(ordering, data):
+    product = 1.0
+    # print(ordering)
     for i in range(len(ordering)-1):
-        num = weights[i]
-        denom = 0
+        num = weights[ordering[i]]
+        denom = 0.0
+        # print(num, i,  ordering[i], 'hello')
         for j in range(i+1, len(ordering)):
-            denom += weights[j]
+            denom += weights[ordering[j]]
         product *= (num/denom)
+        # print(num, denom)
     return 1.0 / product
+
+def pl_curve_test():
+    orderings = mallows.generateMallowsSet(10, 3, 0.8, centroid=[2,1,0])
+    defineWeights(orderings)
+    print('weights', weights)
+    ranking = list(range(3))
+    for perm in itertools.permutations(ranking):
+        print(perm, costFunctionHelper(perm, ranking), '\n\n')
+    print('done')
+
+# pl_curve_test()
