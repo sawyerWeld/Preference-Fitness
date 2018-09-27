@@ -55,6 +55,7 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
     print('Minimum cost:', lowest_cost)
     print('~Best params:', lowest_cost_params)
     print("Finished metropolis process")
+    return lowest_cost
 
 
 def run_gaussian():
@@ -81,7 +82,9 @@ def run_mallows():
     a = list(range(1,order_length+1))
     starting_params = [a, 1.0]
     print('initial mallows cost: ', mallows.costFunction(starting_params, orderings))
-    metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, 1000, 0)
+    nEntries = 1000
+    lowest = metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, nEntries, 0)
+    print('Phi = ', (lowest/nEntries)**(1/2))
     with open('data_output/mallows_data.txt', 'w') as file:
         for line in filewrite:
             ordering = ''.join(map(str, line[0][0]))
@@ -120,5 +123,5 @@ def run_plackettluce():
     print('Finished writing to file')
 
 # run_gaussian()
-# run_mallows()
-run_plackettluce()
+run_mallows()
+# run_plackettluce()
