@@ -81,7 +81,7 @@ def genCandidateNormal(weights):
 # The limit on mass transfered = Δ'(Wᵢ→Wⱼ) = Argmin(Wᵢ,1-Wⱼ)
 # The mass transfered = Δ = U(0,αΔ') where α is a parameter
 # indicating the aggresiveness of the transfer
-def genCandidateTransfer(weights, aggresiveness = 1.0):
+def genCandidateTransfer(weights, aggresiveness = 0.05):
     w = list(weights)
     N = len(w)
     index1 = random.randint(0,N-1)

@@ -3,6 +3,9 @@ library(ggplot2)
 
 data <- read.table("../data_output/PL-data.txt",header = FALSE)
 PLScores <- as.numeric(data[,6])
-print(length(PLScores))
+Iteration <- 1:length(PLScores)
+df <- data.frame(PLScores, Iteration)
 # plot(PLScores, type="o")
-ggplot(data = PLScores, aes())
+ggplot(data = df, aes(x=Iteration,y=PLScores, group=1))+
+  geom_line() +
+  geom_point()

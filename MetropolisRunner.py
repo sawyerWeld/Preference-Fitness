@@ -25,6 +25,7 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
     for step in tqdm(range(N)):
         # Set the values of the new candidate
         new_params = gen_candidate(params)
+        
 
         prev_cost = cost_model(params, dataset)
         new_cost = cost_model(new_params, dataset)
@@ -110,7 +111,7 @@ def run_plackettluce():
     initial = pl.initialWeights(N = 5)
     data = pl.uniformRandomDataset(5, 100)
     print('initial P-L cost:', pl.costFunction(initial, data))
-    metHastings(pl.costFunction, initial, pl.genCandidateTransfer, data, 100, -1)
+    metHastings(pl.costFunction, initial, pl.genCandidateTransfer, data, 10001, 5000)
     with open('data_output/PL-data.txt', 'w') as file:
         for i in tqdm(range(len(filewrite))):
             line = filewrite[i]
