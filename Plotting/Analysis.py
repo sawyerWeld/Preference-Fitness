@@ -29,7 +29,7 @@ def makeFrequencyTable(filename):
                 occurances[ordering] = 1
                 costs[ordering] = cost
 
-makeFrequencyTable('/data_output/mallows_data.txt')
+makeFrequencyTable('data_output/mallows_data.txt')
 
 costOccurances = []
 
