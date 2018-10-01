@@ -8,6 +8,7 @@ import mallows
 import gauss
 import plackettluce_depr as pl2
 import plackettluce as pl
+import readPreflib
 
 
 filewrite = []  # this is a placeholder for writing to a file
@@ -122,6 +123,16 @@ def run_plackettluce():
             file.write(rank + '\t' + str(line[1]) + '\n')
     print('Finished writing to file')
 
-# run_gaussian()
-run_mallows()
-# run_plackettluce()
+def run_plackettluce_on_soi():
+    initial = pl.initialWeights(N = 12)
+    candidates, data = readPreflib.readinSOIdata('analysis/EDIreland.soi')
+    print('initial P-L cost:', pl.costFunction(initial, data))
+    metHastings(pl.costFunction, initial, pl.genCandidateTransfer, data, 2000, 1000)
+    with open('data_output/PL-data-debian.txt', 'w') as file:
+        for i in tqdm(range(len(filewrite))):
+            line = filewrite[i]
+            rank = rankutils.listtostring(line[0], delim=' ')
+            file.write(rank + '\t' + str(line[1]) + '\n')
+    print('Finished writing to file')
+
+run_plackettluce_on_soi()

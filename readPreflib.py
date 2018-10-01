@@ -39,13 +39,3 @@ def readinSOIdata(filename):
                     votes.append(nums + pos)
 
     return candidates, votes
-            
-cands, votes = readinSOIdata('analysis/EDTest.soi')
-
-print('Finished reading from file')
-
-print(cands)
-
-print(len(votes))
-
-print(votes)

@@ -71,3 +71,5 @@ tempCodeRunnerFile.py
 PL_data.txt
 analysis/EDIreland.soi
 *.soi
+data_output/PL-data-debian.txt
+*.txt
