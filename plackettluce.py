@@ -64,6 +64,14 @@ def costFunction(params, dataset):
         probability += partial_sum
     return probability
 
+def preflibSOIcost(params, dataset):
+    # Add the number of occurances to the params
+    # Perhaps a tuple?
+    # (num_occurances, [weights])
+    # Or even how it is read in
+    # [num_occurances,v1,v2,...,vn]
+    pass
+
 def genCandidateNormal(weights):
     N = len(weights)
     chosen_index = random.randint(0,N-1)
