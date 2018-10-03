@@ -73,3 +73,5 @@ analysis/EDIreland.soi
 *.soi
 data_output/PL-data-debian.txt
 *.txt
+*.swp
+
