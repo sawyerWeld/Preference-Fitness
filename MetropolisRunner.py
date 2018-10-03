@@ -6,7 +6,6 @@ import rankutils
 import time
 import mallows
 import gauss
-import plackettluce_depr as pl2
 import plackettluce as pl
 import readPreflib
 
@@ -27,7 +26,6 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
         # Set the values of the new candidate
         new_params = gen_candidate(params)
         
-
         prev_cost = cost_model(params, dataset)
         new_cost = cost_model(new_params, dataset)
 
@@ -81,14 +79,15 @@ def run_mallows():
     order_length = 5
     orderings = mallows.generateMallowsSet(100, order_length, 0.4, centroid=[4,3,2,1,0])
     a = list(range(1,order_length+1))
-    starting_params = [a, 1.0]
+    starting_params = a
     print('initial mallows cost: ', mallows.costFunction(starting_params, orderings))
     nEntries = 1000
-    lowest = metHastings(mallows.costFunction, starting_params, mallows.generateOrdering, orderings, nEntries, 0)
+    lowest = metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, nEntries, 0)
     print('Phi = ', (lowest/nEntries)**(1/2))
     with open('data_output/mallows_data.txt', 'w') as file:
+        file.write('Ordering' + '\t' + 'Cost' + '\n')
         for line in filewrite:
-            ordering = ''.join(map(str, line[0][0]))
+            ordering = ''.join(map(str, line[0]))
             file.write(ordering + '\t' + str(line[1]) + '\n')
     print('Finished writing to file')
 

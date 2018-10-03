@@ -24,6 +24,11 @@ def ktdistanceSOI(a, b):
     return count
 
 
+def genCandidate(params):
+    mu = params
+    return generateOrdering(mu)
+
+
 # Generates a new candidate given current ordering
 def generateOrdering(order):
     # A do()while{} would work better here, not sure how in python
@@ -42,7 +47,6 @@ def generateOrdering(order):
 # Kendall Tau distance from ordering a to b or visaversa
 # Assumes complete orderings from 0:N
 def ktdistance(a, b):
-    print(a, b)
     if len(a) != len(b):
         return -1
     pairs = itertools.combinations(range(len(a)), 2)
@@ -58,8 +62,7 @@ def ktdistance(a, b):
 # How far off from the dataset is our current mu, phi?
 def costFunction(params, dataset):
     orderings = dataset
-    mu = params[0]
-    phi = params[1]
+    mu = params
     loss = 0
     for i in range(len(orderings)):
         loss += ktdistance(orderings[i], mu) # * phi

@@ -75,3 +75,4 @@ data_output/PL-data-debian.txt
 *.txt
 *.swp
 
+__pycache__/mallows.cpython-36.pyc
