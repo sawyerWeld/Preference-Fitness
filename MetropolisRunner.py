@@ -136,3 +136,17 @@ def run_plackettluce_on_soi():
     print('Finished writing to file')
 
 run_plackettluce_on_soi()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
