@@ -1,1 +1,1 @@
-N
+half = True

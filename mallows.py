@@ -3,40 +3,25 @@
 import numpy as np
 import itertools
 
-
-# Kendall Tau distance from ordering a to b or visaversa
-def ktdistance(a, b):
-    if len(a) != len(b):
-        return -1
-    pairs = itertools.combinations(range(len(a)), 2)
-    count = 0
-    for i, j in pairs:
-        first = a[i] - a[j]
-        secnd = b[i] - b[j]
-        if (first * secnd < 0):
-            count += 1
-    return count
-
-
 # Kendall Tau disntace for Strict-Order Incomplete data
 # If rank1 has {a > b} and rank2 has {b > a}, add 1
 # If rank1 has {a > b} and rank2 has {a > b}, add 0
 # If rank1 has {a > b} and rank2 has no info on the 
 # relationship between a and b, add 0.5. 
 def ktdistanceSOI(a, b):
-    combined_list = a + b
-    combined_set = set(combined_list)
-    pairs = itertools.combinations(combined_set, 2)
+    pairs = itertools.combinations(a, 2)
+    count = 0.0
     for i, j in pairs:
-        if (i in a) and (j in a):
-            pass
-
-
-
-a = [1, 2, 3]
-b = [2, 1, 3]
-ktdistanceSOI(a, b)
-print(ktdistance(a,b))
+        half = False
+        first = a.index(i) - a.index(j)
+        try:
+            secnd = a.index(j) - b.index(j)
+        except:
+            half = True
+            count += 0.5
+        if not half and (first * secnd < 0):
+            count += 1
+    return count
 
 
 # Generates a new candidate given current ordering
@@ -52,6 +37,36 @@ def generateOrdering(order):
         order[a], order[b] = order[b], order[a]
         # swap two random ones
     return order
+
+
+# Kendall Tau distance from ordering a to b or visaversa
+# Assumes complete orderings from 0:N
+def ktdistance(a, b):
+    print(a, b)
+    if len(a) != len(b):
+        return -1
+    pairs = itertools.combinations(range(len(a)), 2)
+    count = 0
+    for i, j in pairs:
+        first = a[i] - a[j]
+        secnd = b[i] - b[j]
+        if (first * secnd < 0):
+            count += 1
+    return count
+
+
+# How far off from the dataset is our current mu, phi?
+def costFunction(params, dataset):
+    orderings = dataset
+    mu = params[0]
+    phi = params[1]
+    loss = 0
+    for i in range(len(orderings)):
+        loss += ktdistance(orderings[i], mu) # * phi
+        # Simply multiplying by phi does not make sense
+        # I got it from some piece of literature, but of course it makes
+        # the optimal phi approach 0
+    return loss
 
 
 # Generate a set of mallows orderings

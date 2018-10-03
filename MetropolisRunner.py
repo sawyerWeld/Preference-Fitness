@@ -84,7 +84,7 @@ def run_mallows():
     starting_params = [a, 1.0]
     print('initial mallows cost: ', mallows.costFunction(starting_params, orderings))
     nEntries = 1000
-    lowest = metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, nEntries, 0)
+    lowest = metHastings(mallows.costFunction, starting_params, mallows.generateOrdering, orderings, nEntries, 0)
     print('Phi = ', (lowest/nEntries)**(1/2))
     with open('data_output/mallows_data.txt', 'w') as file:
         for line in filewrite:
@@ -92,23 +92,7 @@ def run_mallows():
             file.write(ordering + '\t' + str(line[1]) + '\n')
     print('Finished writing to file')
 
-# This method is deprecated
-# I did not understand the goal and was iterating over rankings to find the one
-# that was most probable with the give plackett luce weights. Instead, I should have been
-# finding the set of weights with highest probability to procure the given dataset.
-# My attempt at this is run_placettluce()
-def run_plackettluce_depr():
-    order_length = 5
-    orderings = mallows.generateMallowsSet(100, order_length, 0.5, centroid=[4,3,2,1,0])
-    a = [4, 3, 2, 1, 0]
-    starting_params = [a]
-    print('initial P-L cost: ', pl2.costFunction([a], orderings))
-    metHastings(pl2.costFunction, starting_params, pl2.genCandidate, orderings, 1000000, 50000)
-    with open('PL_data.txt', 'w') as file:
-        for line in filewrite:
-            ordering = ''.join(map(str, line[0][0]))
-            file.write(ordering + '\t' + str(line[1]) + '\n')
-    print('Finished writing to file')
+run_mallows()
 
 def run_plackettluce():
     # First step: Produce a set of weights as a starting param
@@ -135,7 +119,7 @@ def run_plackettluce_on_soi():
             file.write(rank + '\t' + str(line[1]) + '\n')
     print('Finished writing to file')
 
-run_plackettluce_on_soi()
+# run_plackettluce_on_soi()
 
 
 
