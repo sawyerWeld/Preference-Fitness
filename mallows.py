@@ -1,7 +1,8 @@
-# Helper functions for MetropolisRunner
+# Helper function for MetropolisRunner
 
 import numpy as np
 import itertools
+
 
 # Kendall Tau distance from ordering a to b or visaversa
 def ktdistance(a, b):
@@ -16,18 +17,32 @@ def ktdistance(a, b):
             count += 1
     return count
 
-def genCandidate(tup):
-    order = tup[0]
-    num = tup[1]
-    new_order = generateOrdering(order)
-    new_num = num + np.random.normal(0, 0.5)
-    return ((new_order, new_num))
+
+# Kendall Tau disntace for Strict-Order Incomplete data
+# If rank1 has {a > b} and rank2 has {b > a}, add 1
+# If rank1 has {a > b} and rank2 has {a > b}, add 0
+# If rank1 has {a > b} and rank2 has no info on the 
+# relationship between a and b, add 0.5. 
+def ktdistanceSOI(a, b):
+    combined_list = a + b
+    combined_set = set(combined_list)
+    pairs = itertools.combinations(combined_set, 2)
+    for i, j in pairs:
+        if (i in a) and (j in a):
+            pass
+
+
+
+a = [1, 2, 3]
+b = [2, 1, 3]
+ktdistanceSOI(a, b)
+print(ktdistance(a,b))
+
 
 # Generates a new candidate given current ordering
-def generateOrdering(inp):
-    order = list(inp)
+def generateOrdering(order):
     # A do()while{} would work better here, not sure how in python
-    tuning_parameter = 0.9
+    tuning_parameter = 0.1
     a = np.random.randint(len(order))
     b = np.random.randint(len(order))
     order[a], order[b] = order[b], order[a]
@@ -38,18 +53,6 @@ def generateOrdering(inp):
         # swap two random ones
     return order
 
-# How far off from the dataset is our current mu, phi?
-def costFunction(params, dataset):
-    orderings = dataset
-    mu = params[0]
-    phi = params[1]
-    loss = 0
-    for i in range(len(orderings)):
-        loss += ktdistance(orderings[i], mu) # * phi
-        # Simply multiplying by phi does not make sense
-        # I got it from some piece of literature, but of course it makes
-        # the optimal phi approach 0
-    return loss
 
 # Generate a set of mallows orderings
 # num is how many orderings
@@ -73,6 +76,6 @@ def generateMallowsSet(num, N, eta, centroid=0):
         list.append(ord)
     return list
 
-# test_set = generateMallowsSet(5, 10, 0.3, centroid=[9,8,7,6,5,4,3,2,1,0])
-# for o in test_set:
-#     print(o)
+# centroid = [3, 4, 1, 2, 5]
+# print(generateMallowsSet(10,5,0.1))
+
