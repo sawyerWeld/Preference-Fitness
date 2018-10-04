@@ -72,6 +72,20 @@ def costFunction(params, dataset):
     return loss
 
 
+def costFunctionSOI(params, dataset):
+    loss = 0
+    data = dataset
+    mu = params
+    for num_occurances, order in data:
+        loss += ktdistance(order, mu) * num_occurances
+    return loss
+
+import readPreflib
+
+candidates, data = readPreflib.readinSOIwfreqs('analysis/EDTest.soi')
+print(costFunctionSOI([1,2], data))
+
+
 # Generate a set of mallows orderings
 # num is how many orderings
 # N is how long each is
