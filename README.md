@@ -23,7 +23,6 @@ For instance, ABC and ACB are 1 unit apart, the relationship between B and C has
 The Plackett-Luce model relies on a set of parameters known as weights. The weight vector, denoted herewithin as W, contains one weight for every alternative in the dataset. The weight for alternative i, W<sub>i</sub>, tells us how prefered alternative i is. The larger the weight, the more preferred the alternative it corresponds to is.
 
 The probability of a given ranking, ABC, is given as the sum of the probability of each relationship encoded within the preference. ABC implies A > B, A > C, and B > C. The probability of A being ranked first over B and C is the probability of A being ranked over B and C times the probability of B being ranked over C. This is given as
-
-<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{W_A}{W_B&space;*&space;W_B}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{W_A}{W_B&space;*&space;W_B}" title="\frac{W_A}{W_B * W_B}" /></a
-
->
+<p align="center">
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{W_A}{W_B&space;*&space;W_B}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{W_A}{W_B&space;*&space;W_B}" title="\frac{W_A}{W_B * W_B}" /></a>
+</p align="center">
