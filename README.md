@@ -26,3 +26,5 @@ The probability of a given ranking, ABC, is given as the sum of the probability 
 <p align="center">
   <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{W_A}{W_B&space;&plus;&space;W_C}&space;\times&space;\frac{W_B}  {W_C}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{W_A}{W_B&space;&plus;&space;W_C}&space;\times&space;\frac{W_B}{W_C}" title="\frac{W_A}{W_B + W_C} \times \frac{W_B}{W_C}" /></a>
 </p align="center">
+More generally, the probability of ordering O with weights [W_0:W_N-1] is given as
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{W_0}{W_1&plus;\ldots&plus;W_{N-1}}\times\frac{W_1}{W_2&plus;\ldots&plus;W_{N-1}}\times\ldots\times\frac{W_{N-3}}{W_{N-2}&plus;W_{N-1}}\times\frac{W_{N-2}}{W_{N-1}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{W_0}{W_1&plus;\ldots&plus;W_{N-1}}\times\frac{W_1}{W_2&plus;\ldots&plus;W_{N-1}}\times\ldots\times\frac{W_{N-3}}{W_{N-2}&plus;W_{N-1}}\times\frac{W_{N-2}}{W_{N-1}}" title="\frac{W_0}{W_1+\ldots+W_{N-1}}\times\frac{W_1}{W_2+\ldots+W_{N-1}}\times\ldots\times\frac{W_{N-3}}{W_{N-2}+W_{N-1}}\times\frac{W_{N-2}}{W_{N-1}}" /></a>
