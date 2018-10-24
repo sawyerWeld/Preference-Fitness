@@ -66,11 +66,21 @@ def costFunction(params, dataset):
 
 def preflibSOIcost(params, dataset):
     # Add the number of occurances to the params
-    # Perhaps a tuple?
-    # (num_occurances, [weights])
-    # Or even how it is read in
-    # [num_occurances,v1,v2,...,vn]
-    pass
+    # params is the list of weights
+    # dataset is a list of (num_occurances, ordering)
+    weights = params
+    data = dataset
+    probability = 0
+    for tup in data:
+        num_occurances, succ = tup
+        partial_sum = 0
+        N = len(succ)
+        for j in range(N-1):
+            numer = weights[j]
+            denom = sum(succ[j:N])
+            partial_sum += np.log(numer / denom)
+        probability += num_occurances * partial_sum
+    return probability
 
 def genCandidateNormal(weights):
     N = len(weights)
