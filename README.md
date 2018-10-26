@@ -55,7 +55,14 @@ While (N < Number_of_Iterations):
 The Generate_Candidate function serves to create a new set of parameters given the current parameters. The candidate generation function,when applied multiple times, must have a non-zero probability of generating any set of parameters or else it would violate ergodic principles. 
 
 #### Mallows Model
-The Mallows model has two parameters: the 'mean' ranking µ, and the variance ϕ. ϕ is a float and can be adjusted by selecting a float from a uniformly random distribution and adding it to ϕ. Generating a new central ranking given the current ranking is more difficult:
+The Mallows model has two parameters: the 'mean' ranking µ, and the variance ϕ. ϕ is a float and can be adjusted by selecting a float from a uniformly random distribution and adding it to ϕ. Generating a new central ranking given the current ranking R works as follows:
+
+```
+Do:
+  α = Random_Int(0, Length(R))
+  β = Random_Int(0, Length(R))
+  
+```
 
 #### Plackett-Luce
 
