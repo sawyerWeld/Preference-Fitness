@@ -55,7 +55,12 @@ While (N < Number_of_Iterations):
 The Generate_Candidate function serves to create a new set of parameters given the current parameters. The candidate generation function,when applied multiple times, must have a non-zero probability of generating any set of parameters or else it would violate ergodic principles. 
 
 #### Mallows Model
-The Mallows model has two parameters: the 'mean' ranking µ, and the variance ϕ. ϕ is a float and can be adjusted by selecting a float from a uniformly random distribution and adding it to ϕ. Generating a new central ranking given the current ranking R works as follows:
+The Mallows model has two parameters: the 'mean' ranking µ, and the variance ϕ. 
+
+**This next paragraph needs revision. Do I actually use the Metropolis algorithm to find phi? I know it indicates the spread of the data, but I'm not sure how exactly that works and I'm not sure the relationship between phi here and eta in the mallows dataset generation model.**
+ϕ is a float and can be adjusted by selecting a float from a uniformly random distribution and adding it to ϕ. 
+
+Generating a new central ranking given the current ranking R works as follows:
 
 ```
 Do:
@@ -86,6 +91,12 @@ Transfer_Amount = Transfer_Limit * Tuning_Parameter
 W[Index_I] -= Transfer_Amount
 W[Index_J] += Transfer_Amount
 ```
+
+### Cost Functions
+The Cost_Function function serves to score the current set of parameters against the dataset. The cost of one set of parameters does not tell us much, but by comparing the cost of two sets of parameters against each other, we can determine which set of parameters better fits the dataset.
+
+#### Mallows Model
+To find the central ranking of a Mallows model we seek to minimize the distance between the central ranking, µ, to every ranking present in the dataset. Therefore the cost function on a dataset D is:
 
 
 
