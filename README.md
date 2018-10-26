@@ -104,9 +104,16 @@ To find the central ranking of a Mallows model we seek to minimize the distance 
 
 Where Kendall-Tau distance is defined as:
 <p align = "center">
-<a href="https://www.codecogs.com/eqnedit.php?latex=KT(\mu,O)&space;=&space;\sum_{&space;\{&space;i,j\}&space;\in&space;{\mu&space;\choose&space;2}}&space;[&space;\{&space;Index(\mu,i)&space;-&space;Index(u,j)&space;\}&space;\times&space;\{&space;Index(O,i)&space;-&space;Index(O,j)&space;\}&space;]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?KT(\mu,O)&space;=&space;\sum_{&space;\{&space;i,j\}&space;\in&space;{\mu&space;\choose&space;2}}&space;[&space;\{&space;Index(\mu,i)&space;-&space;Index(u,j)&space;\}&space;\times&space;\{&space;Index(O,i)&space;-&space;Index(O,j)&space;\}&space;]" title="KT(\mu,O) = \sum_{ \{ i,j\} \in {\mu \choose 2}} [ \{ Index(\mu,i) - Index(u,j) \} \times \{ Index(O,i) - Index(O,j) \} ]" /></a>
+<a href="https://www.codecogs.com/eqnedit.php?latex=KT(\mu,o)&space;=&space;\sum_{&space;\{&space;i,j\}&space;\in&space;{\mu&space;\choose&space;2}}&space;[&space;\{&space;Index(\mu,i)&space;-&space;Index(u,j)&space;\}&space;\times&space;\{&space;Index(o,i)&space;-&space;Index(o,j)&space;\}&space;]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?KT(\mu,o)&space;=&space;\sum_{&space;\{&space;i,j\}&space;\in&space;{\mu&space;\choose&space;2}}&space;[&space;\{&space;Index(\mu,i)&space;-&space;Index(u,j)&space;\}&space;\times&space;\{&space;Index(o,i)&space;-&space;Index(o,j)&space;\}&space;]" title="KT(\mu,o) = \sum_{ \{ i,j\} \in {\mu \choose 2}} [ \{ Index(\mu,i) - Index(u,j) \} \times \{ Index(o,i) - Index(o,j) \} ]" /></a>
 </p align = "center">
 
+This does not cover the case where the value of a relationship encoded in the first ranking cannot be found in the second ranking. We cover this as follows:
+```
+try:
+  // Kendall Tau Code
+catch:
+  kt += 0.5
+```
 
 
 
