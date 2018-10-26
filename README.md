@@ -33,8 +33,7 @@ More generally, the probability of ordering O with weights W is given as
 
 ## Parameter Estimation
 
-To estimate the parameters of the models given the data, we use the Metropolis-Hastings algorithm. The Metropolis algorithm is an MCMC method that works as follows:
-
+To estimate the parameters of the models given the data, we use the Metropolis-Hastings algorithm. The Metropolis algorithm is an MCMC method that works as follows: Generate a new set of parameters given the previous parameters. If the new parameters score better than the previous parameters (in the case of this implementation, lower is better), the new parameters are the new current parameters. If the new parameters are not better, they can still be set as the new parameters; the probability of accepting the new candidates when they are worse than the current parameters is proportional to the ratio of the new paramters to the current parameters.
 ```
 Current_Parameters = Random_Parameters
 
@@ -51,7 +50,7 @@ While (N < Number_of_Samples):
     Current_Parameters = New_Parameters
 ```
 
-
+### Generating New Candidates
 
 
 
