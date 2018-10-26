@@ -11,7 +11,7 @@ The current focus is on the Plackett-Luce model and Mallow's Phi model. I'm hopi
 
 ## Models
 
-### Mallow:
+### Mallows:
 
 The Mallows modle is the preference modelling equivalent of a gaussian distribution. The mean is in this case a central ranking, denoted µ, is the ranking for which the sum distance from µ to every other ranking is minimized. 
 
@@ -34,10 +34,11 @@ More generally, the probability of ordering O with weights W is given as
 ## Parameter Estimation
 
 To estimate the parameters of the models given the data, we use the Metropolis-Hastings algorithm. The Metropolis algorithm is an MCMC method that works as follows: Generate a new set of parameters given the previous parameters. If the new parameters score better than the previous parameters (in the case of this implementation, lower is better), the new parameters are the new current parameters. If the new parameters are not better, they can still be set as the new parameters; the probability of accepting the new candidates when they are worse than the current parameters is proportional to the ratio of the new paramters to the current parameters.
+
 ```
 Current_Parameters = Random_Parameters
 
-While (N < Number_of_Samples):
+While (N < Number_of_Iterations):
   New_Parameters = Generate_Candidate(Current_Parameters)
   
   Current_Score = Loss_Function(Current_Parameters)
@@ -51,7 +52,12 @@ While (N < Number_of_Samples):
 ```
 
 ### Generating New Candidates
+The Generate_Candidate function serves to create a new set of parameters given the current parameters. The candidate generation function,when applied multiple times, must have a non-zero probability of generating any set of parameters or else it would violate ergodic principles. 
 
+#### Mallows Model
+The Mallows model has two parameters: the 'mean' ranking µ, and the variance ϕ. ϕ is a float and can be adjusted by selecting a float from a uniformly random distribution and adding it to ϕ. Generating a new central ranking given the current ranking is more difficult:
+
+#### Plackett-Luce
 
 
 
