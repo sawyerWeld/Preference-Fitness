@@ -61,10 +61,37 @@ The Mallows model has two parameters: the 'mean' ranking µ, and the variance ϕ
 Do:
   α = Random_Int(0, Length(R))
   β = Random_Int(0, Length(R))
-  
+  Swap_in_Place(R[α], R[β])
+While (Uniform_Random(0, 1) > Tuning_Parameter)
 ```
 
+The tuning parameter is used to tweak how far from the current parameters the new parameters will be. The lower the tuning parameter, the higher the Kendall-Tau distance from the current parameters to the new parameters.
+
 #### Plackett-Luce
+The parameters of the Plackett-Luce model are a vector of weights corresponding to each alternative in the dataset. The sum of the vector is 1.0. We generate a new candidate vector by moving mass from one alternative to another in the weight vector W as follows:
+
+```
+Index_I = Random_Int(0, Length(R))
+Index_J = Random_Int(0, Length(R))
+
+While(Index_I == Index_J):
+  Index_J = Random_Int(0, Length(R))
+  
+I = W[Index_I]
+J = W[Index_J]
+
+Transfer_Limit = Minimum(I, 1.0 - J)
+Transfer_Amount = Transfer_Limit * Tuning_Parameter
+
+W[Index_I] -= Transfer_Amount
+W[Index_J] += Transfer_Amount
+```
+
+
+
+
+
+
 
 
 
