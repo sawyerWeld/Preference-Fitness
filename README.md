@@ -98,12 +98,14 @@ The Cost_Function function serves to score the current set of parameters against
 #### Mallows Model
 To find the central ranking of a Mallows model we seek to minimize the distance between the central ranking, µ, to every ranking present in the dataset. Therefore the cost function on a set of orderings O is:
 
+<p align = "center">
 <a href="https://www.codecogs.com/eqnedit.php?latex=\sum_{o&space;\in&space;O}KT(\mu,o)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum_{o&space;\in&space;O}KT(\mu,o)" title="\sum_{o \in O}KT(\mu,o)" /></a>
+</p align = "center">
 
 Where Kendall-Tau distance is defined as:
 <p align = "center">
 <a href="https://www.codecogs.com/eqnedit.php?latex=KT(\mu,O)&space;=&space;\sum_{&space;\{&space;i,j\}&space;\in&space;{\mu&space;\choose&space;2}}&space;[&space;\{&space;Index(\mu,i)&space;-&space;Index(u,j)&space;\}&space;\times&space;\{&space;Index(O,i)&space;-&space;Index(O,j)&space;\}&space;]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?KT(\mu,O)&space;=&space;\sum_{&space;\{&space;i,j\}&space;\in&space;{\mu&space;\choose&space;2}}&space;[&space;\{&space;Index(\mu,i)&space;-&space;Index(u,j)&space;\}&space;\times&space;\{&space;Index(O,i)&space;-&space;Index(O,j)&space;\}&space;]" title="KT(\mu,O) = \sum_{ \{ i,j\} \in {\mu \choose 2}} [ \{ Index(\mu,i) - Index(u,j) \} \times \{ Index(O,i) - Index(O,j) \} ]" /></a>
-<\p align = "center">
+</p align = "center">
 
 
 
