@@ -15,7 +15,7 @@ def ktdistanceSOI(a, b):
         half = False
         first = a.index(i) - a.index(j)
         try:
-            secnd = a.index(j) - b.index(j)
+            secnd = b.index(j) - b.index(j)
         except:
             half = True
             count += 0.5
