@@ -1,6 +1,5 @@
 ### Immediate Issues
-**
-The biggest issue I have is with the dispersion parameter in the Mallow's Model. I understand that this parameter indicates dispersion in the data, but im not sure what the relationship is or how to find it. When we generate data using the method from Lu & Boutillier 2014, we use a parameter eta in range 0 to 1 that determines how many times to swap two alternatives. I'm not sure what the relationship between phi and eta is, or if I can somehow find an estimation of eta directly from the data. 
+**The biggest issue I have is with the dispersion parameter in the Mallow's Model. I understand that this parameter indicates dispersion in the data, but im not sure what the relationship is or how to find it. When we generate data using the method from Lu & Boutillier 2014, we use a parameter eta in range 0 to 1 that determines how many times to swap two alternatives. I'm not sure what the relationship between phi and eta is, or if I can somehow find an estimation of eta directly from the data. 
 **
 
 # Empirical Analysis of Preference Model Fit
