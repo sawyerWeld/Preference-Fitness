@@ -1,3 +1,7 @@
+**### Immediate Issues
+The biggest issue I have is with the dispersion parameter in the Mallow's Model. I understand that this parameter indicates dispersion in the data, but im not sure what the relationship is or how to find it. When we generate data using the method from Lu & Boutillier 2014, we use a parameter eta in range 0 to 1 that determines how many times to swap two alternatives. I'm not sure what the relationship between phi and eta is, or if I can somehow find an estimation of eta directly from the data. 
+**
+
 # Empirical Analysis of Preference Model Fit
 
 Analyzing the fit of various preference models on real-world data. This data includes data with ties or missing candidates.
@@ -17,6 +21,8 @@ The Mallows modle is the preference modelling equivalent of a gaussian distribut
 
 Distance measure here is important. We are using the Kenall-Tau distance measure, which quantifies the minimium number of swappings of alternatives required to turn one ranking into the other.
 For instance, ABC and ACB are 1 unit apart, the relationship between B and C has swapped. ABC and ABD are also 1 unit of distance apart, as the relationships between (A and B) and C have changed by 1/2 each. They've gone from greater than to no informaiton, which is 1/2 unit of distance each.
+
+There is a second parameter, ϕ, which indicates the dispersion of the data. I need to explore this parameter further. **todo**
 
 ### Plackett-Luce:
 
@@ -114,6 +120,13 @@ try:
 catch:
   kt += 0.5
 ```
+
+## How to generate datasets given estimated parameters
+todo
+## How to determine the similarity of the generated dataset and the true data
+todo
+Apples to apples comparison
+Iterate over every possible ranking (12!), summing the difference between P(ranking) in the generated set and the true set.
 
 
 
