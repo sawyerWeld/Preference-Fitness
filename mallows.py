@@ -3,6 +3,9 @@
 import numpy as np
 import itertools
 
+def np_index(array, value):
+    return np.where(array==value)[0][0]
+
 # Kendall Tau disntace for Strict-Order Incomplete data
 # If rank1 has {a > b} and rank2 has {b > a}, add 1
 # If rank1 has {a > b} and rank2 has {a > b}, add 0
@@ -12,17 +15,18 @@ def ktdistanceSOI(a, b):
     pairs = itertools.combinations(a, 2)
     count = 0.0
     for i, j in pairs:
+        print('-----',i, j)
         half = False
-        first = a.index(i) - a.index(j)
+        first = np_index(a, i) - np_index(a, j)
+        print(first, np_index(a, i))
         try:
-            secnd = b.index(j) - b.index(j)
+            secnd = np_index(b, i) - np_index(b, j)
         except:
             half = True
             count += 0.5
         if not half and (first * secnd < 0):
             count += 1
     return count
-
 
 def genCandidate(params):
     mu = params
@@ -77,13 +81,13 @@ def costFunctionSOI(params, dataset):
     data = dataset
     mu = params
     for num_occurances, order in data:
-        loss += ktdistance(order, mu) * num_occurances
+        loss += ktdistanceSOI(order, mu) * num_occurances
     return loss
 
-import readPreflib
+#import readPreflib
 
-candidates, data = readPreflib.readinSOIwfreqs('analysis/EDTest.soi')
-print(costFunctionSOI([1,2], data))
+#candidates, data = readPreflib.readinSOIwfreqs('analysis/EDTest.soi')
+#print(costFunctionSOI([1,2], data))
 
 
 # Generate a set of mallows orderings
@@ -115,4 +119,8 @@ def generateMallowsSet(num, N, eta, centroid=0):
     return list
 
 centroid = [3, 4, 1, 2, 5]
-print(generateMallowsSet(10,5,0.9))
+data = generateMallowsSet(10,5,0.9)
+print(ktdistanceSOI(centroid, list(data[1])))
+
+
+
