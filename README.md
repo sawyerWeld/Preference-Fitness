@@ -121,7 +121,25 @@ catch:
 ```
 
 ## How to generate datasets given estimated parameters
-todo
+
+#### Mallows
+Generating a dataset given a mallows model follows the same steps as generating a new candidate during parameter estimation. Given a central ranking, we generate rankings for the dataset using the same algorithm used for generating new candidates and add the generated rankings to the dataset. The tricky bit is converting the dispersion parameter of the mallow's model, ϕ, to the tuning parameter of the candidate generation algorithm. The tuning parameter, which we will denote λ, is the probability of swapping two random alternatives in the ranking at each given iteration. If the uniformly sampled random value is less than 
+
+```
+New_Ranking[0] = Centroid[0]
+For i in Range(1, Length(Centroid)):
+
+  New_Ranking[i] = Centroid[i]
+  For j in Range_Descending(i, 0):
+  
+    If λ > Uniform_Random(0,1):
+      Swap(New_Ranking[j], New_Ranking[j-1]
+    Else:
+      Break
+```
+
+There are 
+
 ## How to determine the similarity of the generated dataset and the true data
 todo
 Apples to apples comparison
