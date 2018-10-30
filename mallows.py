@@ -95,7 +95,7 @@ def generateMallowsSet(num, N, eta, centroid=0):
     if centroid == 0:
         centroid = np.arange(N)
     list = []
-    for i in range(num):
+    for _ in range(num):
         ord = np.arange(N)
         ord[0] = centroid[0]
         for i in range(1, N):
@@ -108,6 +108,5 @@ def generateMallowsSet(num, N, eta, centroid=0):
         list.append(ord)
     return list
 
-# centroid = [3, 4, 1, 2, 5]
-# print(generateMallowsSet(10,5,0.1))
-
+centroid = [3, 4, 1, 2, 5]
+print(generateMallowsSet(10,5,0.5))

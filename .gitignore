@@ -76,3 +76,5 @@ data_output/PL-data-debian.txt
 *.swp
 
 __pycache__/mallows.cpython-36.pyc
+analysis/.ipynb_checkpoints/Phi_vs_Eta-checkpoint.ipynb
+analysis/.ipynb_checkpoints/Untitled-checkpoint.ipynb
