@@ -1,3 +1,7 @@
+#####################################
+# This stuff is all wrong ignore it #
+#####################################
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -24,7 +28,15 @@ print(analysis(10, 0, 100, 1,  0.5))
 
 x, y = zip(*analysis(10, 0, 100, 1,  0.5))
 plt.scatter(x,y)
-# plt.title('Mallow\'s Distribution. N=1M Burnout=50k')
-plt.xlabel('Cost Function')
-plt.ylabel('Frequency')
 plt.show()
+
+# def flips(p=0.25):
+#     c = 0
+#     while(p >= np.random.uniform(0.0,1.0)):
+#         c += 1
+#     return c
+
+# tot = 0
+# for _ in range(10000):
+#     tot += flips()
+# print(tot/10000.0)

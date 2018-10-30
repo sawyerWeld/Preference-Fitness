@@ -77,13 +77,14 @@ def run_gaussian():
 
 def run_mallows():
     order_length = 5
-    orderings = mallows.generateMallowsSet(100, order_length, 0.4, centroid=[4,3,2,1,0])
+    orderings = mallows.generateMallowsSet(100, order_length, eta=0.99, centroid=[4,3,2,1,0])
     a = list(range(1,order_length+1))
     starting_params = a
     print('initial mallows cost: ', mallows.costFunction(starting_params, orderings))
     nEntries = 1000
     lowest = metHastings(mallows.costFunction, starting_params, mallows.genCandidate, orderings, nEntries, 0)
-    print('Phi = ', (lowest/nEntries)**(1/2))
+    #print('Phi = ', (lowest/nEntries)**(1/2))
+    print('Number of swaps in best case:', lowest/nEntries)
     with open('data_output/mallows_data.txt', 'w') as file:
         file.write('Ordering' + '\t' + 'Cost' + '\n')
         for line in filewrite:

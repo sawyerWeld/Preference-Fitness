@@ -92,6 +92,7 @@ print(costFunctionSOI([1,2], data))
 # eta is acceptance param in range [0.0, 1.0)
 # see Lu & Boutillier 2014
 def generateMallowsSet(num, N, eta, centroid=0):
+    swaps = 0
     if centroid == 0:
         centroid = np.arange(N)
     list = []
@@ -100,13 +101,18 @@ def generateMallowsSet(num, N, eta, centroid=0):
         ord[0] = centroid[0]
         for i in range(1, N):
             ord[i] = centroid[i]
-            for j in range(i, 0, -1):
-                if eta > np.random.uniform(0.0, 1.0):
-                    ord[j], ord[j-1] = ord[j-1], ord[j]
-                else:
-                    break
+
+
+            j = i
+            while (eta >  np.random.uniform(0.0, 1.0) and j >= 1):
+                
+                ord[j], ord[j-1] = ord[j-1], ord[j]
+                swaps += 1
+                j -= 1
+
         list.append(ord)
+    print(swaps)
     return list
 
 centroid = [3, 4, 1, 2, 5]
-print(generateMallowsSet(10,5,0.5))
+print(generateMallowsSet(10,5,0.9))
