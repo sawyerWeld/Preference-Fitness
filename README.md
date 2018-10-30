@@ -1,6 +1,8 @@
 ### Immediate Issues
 **The biggest issue I have is with the dispersion parameter in the Mallow's Model. I understand that this parameter indicates dispersion in the data, but im not sure what the relationship is or how to find it. When we generate data using the method from Lu & Boutillier 2014, we use a parameter eta in range 0 to 1 that determines how many times to swap two alternatives. I'm not sure what the relationship between phi and eta is, or if I can somehow find an estimation of eta directly from the data.**
 
+When generating mallows dataset with incomplete data, I should create incomplete rankings with the same probability of the dataset. Reading in the data I should store a vector Lengths[] where Lengths[i] is the proportion of all votes with length i.
+
 # Empirical Analysis of Preference Model Fit
 
 Analyzing the fit of various preference models on real-world data. This data includes data with ties or missing candidates.
