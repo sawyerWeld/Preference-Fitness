@@ -140,7 +140,7 @@ When generating a new set of orderings according to a Mallows model, we want the
 
 To find the relationship between η and KT we generate rankings of a given length across a range of η's. Using rankings of length 12 we find the following approximate curve:
 
-insert scatterplot with fit line here
+**insert scatterplot with fit line here
 
 Fitting a curve to this we find the relationship:
 
