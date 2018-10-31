@@ -151,6 +151,9 @@ Fitting a curve to this we find the relationship:
 
 Which is equal to
 
+<p align = "center">
+<a href="https://www.codecogs.com/eqnedit.php?latex=\eta&space;=&space;0.268\ln{\Bigl|&space;\frac{KT&space;&plus;&space;0.569}{1.542}\Bigr|}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta&space;=&space;0.268\ln{\Bigl|&space;\frac{KT&space;&plus;&space;0.569}{1.542}\Bigr|}" title="\eta = 0.268\ln{\Bigl| \frac{KT + 0.569}{1.542}\Bigr|}" /></a>
+</p align = "center>
 
 
 a
