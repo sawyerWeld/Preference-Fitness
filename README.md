@@ -62,10 +62,7 @@ While (N < Number_of_Iterations):
 The Generate_Candidate function serves to create a new set of parameters given the current parameters. The candidate generation function,when applied multiple times, must have a non-zero probability of generating any set of parameters or else it would violate ergodic principles. 
 
 #### Mallows Model
-The Mallows model has two parameters: the 'mean' ranking µ, and the variance ϕ. 
-
-**This next paragraph needs revision. Do I actually use the Metropolis algorithm to find phi? I know it indicates the spread of the data, but I'm not sure how exactly that works and I'm not sure the relationship between phi here and eta in the mallows dataset generation model.**
-ϕ is a float and can be adjusted by selecting a float from a uniformly random distribution and adding it to ϕ. 
+The Mallows model has two parameters: the 'mean' or 'central' ranking ,µ, and the variance, the later of which we can compute directly after finding a good estimate of the former. 
 
 Generating a new central ranking given the current ranking R works as follows:
 
@@ -77,7 +74,7 @@ Do:
 While (Uniform_Random(0, 1) > Tuning_Parameter)
 ```
 
-The tuning parameter is used to tweak how far from the current parameters the new parameters will be. The lower the tuning parameter, the higher the Kendall-Tau distance from the current parameters to the new parameters.
+The tuning parameter is used to tweak how far from the current parameters the new parameters will be. The lower the tuning parameter, the higher the Kendall-Tau distance from the current parameters to the new parameters. This tuning parameter is analagous to a learning rate. **Todo: I'd like to look into decreasing this tuning parameter like temperature in simulated annealing, but not in this paper. should i mention that here or maybe in a future work section.
 
 #### Plackett-Luce
 The parameters of the Plackett-Luce model are a vector of weights corresponding to each alternative in the dataset. The sum of the vector is 1.0. We generate a new candidate vector by moving mass from one alternative to another in the weight vector W as follows:
@@ -125,22 +122,39 @@ catch:
 ## How to generate datasets given estimated parameters
 
 #### Mallows
-Generating a dataset given a mallows model follows the same steps as generating a new candidate during parameter estimation. Given a central ranking, we generate rankings for the dataset using the same algorithm used for generating new candidates and add the generated rankings to the dataset. The tricky bit is converting the dispersion parameter of the mallow's model, ϕ, to the tuning parameter of the candidate generation algorithm. The tuning parameter, which we will denote λ, is the probability of swapping two random alternatives in the ranking at each given iteration. If the uniformly sampled random value is less than 
+**todo rewrite**
+Generating a dataset given a mallows model follows the same steps as generating a new candidate during parameter estimation. Given a central ranking, we generate rankings for the dataset using the same algorithm used for generating new candidates and add the generated rankings to the dataset. The tricky bit is converting the dispersion mallow's model to the tuning parameter of the candidate generation algorithm. The tuning parameter, which we denote η, is the probability of swapping two random alternatives in the ranking at each given iteration. If the uniformly sampled random value is less than 
 
 ```
 New_Ranking[0] = Centroid[0]
 For i in Range(1, Length(Centroid)):
 
   New_Ranking[i] = Centroid[i]
-  For j in Range_Descending(i, 0):
   
-    If λ > Uniform_Random(0,1):
+  j = i
+  While η > Uniform_Random(0,1) And j ≥ 1:
       Swap(New_Ranking[j], New_Ranking[j-1]
-    Else:
-      Break
+      j --
 ```
 
-There are 
+When generating a new set of orderings according to a Mallows model, we want the average Kendall-Tau distance from the central ranking to each other ranking to be the same in the generated set and the real set. To do this we first computing the average distance in the real data, which is equal to the cost function divided by the number of rankings in the dataset. 
+
+To find the relationship between η and KT we generate rankings of a given length across a range of η's. Using rankings of length 12 we find the following approximate curve:
+
+**scatterplot with fit line**
+
+Fitting a curve to this we find the relationship:
+
+<p align = "center">
+<a href="https://www.codecogs.com/eqnedit.php?latex=KT&space;\approx&space;1.542&space;e^{-3.729&space;\eta}&space;-&space;0.569" target="_blank"><img src="https://latex.codecogs.com/gif.latex?KT&space;\approx&space;1.542&space;e^{-3.729&space;\eta}&space;-&space;0.569" title="KT \approx 1.542 e^{-3.729 \eta} - 0.569" /></a>
+</p align = "center">
+
+Which is equal to
+
+<p align = "center">
+<a href="https://www.codecogs.com/eqnedit.php?latex=\eta&space;=&space;0.268\ln{\Bigl|&space;\frac{KT&space;&plus;&space;0.569}{1.542}\Bigr|}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta&space;=&space;0.268\ln{\Bigl|&space;\frac{KT&space;&plus;&space;0.569}{1.542}\Bigr|}" title="\eta = 0.268\ln{\Bigl| \frac{KT + 0.569}{1.542}\Bigr|}" /></a>
+</p align = "center>
+
 
 ## How to determine the similarity of the generated dataset and the true data
 todo
