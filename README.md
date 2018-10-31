@@ -1,5 +1,4 @@
 ### Immediate Issues
-**The biggest issue I have is with the dispersion parameter in the Mallow's Model. I understand that this parameter indicates dispersion in the data, but im not sure what the relationship is or how to find it. When we generate data using the method from Lu & Boutillier 2014, we use a parameter eta in range 0 to 1 that determines how many times to swap two alternatives. I'm not sure what the relationship between phi and eta is, or if I can somehow find an estimation of eta directly from the data.**
 
 When generating mallows dataset with incomplete data, I should create incomplete rankings with the same probability of the dataset. Reading in the data I should store a vector Lengths[] where Lengths[i] is the proportion of all votes with length i.
 
@@ -155,24 +154,8 @@ Which is equal to
 <a href="https://www.codecogs.com/eqnedit.php?latex=\eta&space;=&space;0.268\ln{\Bigl|&space;\frac{KT&space;&plus;&space;0.569}{1.542}\Bigr|}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta&space;=&space;0.268\ln{\Bigl|&space;\frac{KT&space;&plus;&space;0.569}{1.542}\Bigr|}" title="\eta = 0.268\ln{\Bigl| \frac{KT + 0.569}{1.542}\Bigr|}" /></a>
 </p align = "center>
 
+#  How to determine the similarity of the generated dataset and the true data
 
-a
-a
-a
-a
-a
-a
+*It seems there is a length limit on Github, see README_2.md*
 
-###  How to determine the similarity of the generated dataset and the true data
-todo
-Apples to apples comparison
-Iterate over every possible ranking (12!), summing the difference between P(ranking) in the generated set and the true set.
-The dataset won't have all of the rankings, not even close to all of them. Perhaps something akin to laplace smoothing?
 
-* The Laplace-smoothed probability of event a in probability distribution A is as follows:
-
-<p align = "center">
-<a href="https://www.codecogs.com/eqnedit.php?latex=P_{Laplace}(a)&space;=&space;\frac{freq(a)&space;&plus;&space;k}{size(A)&space;&plus;&space;(uniques(A)\times&space;k)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P_{Laplace}(a)&space;=&space;\frac{freq(a)&space;&plus;&space;k}{size(A)&space;&plus;&space;(uniques(A)\times&space;k)}" title="P_{Laplace}(a) = \frac{freq(a) + k}{size(A) + (uniques(A)\times k)}" /></a>
-</p align = "center">
-
-Where k is a parameter that determines how many times each possible event is added. As long as k is greater than or equal to 1, every event has non-zero probability. Increasing k causes the distribution to become more similar to the uniform distribution, but as long as we are consistent with the value of k across models, the results should be statistically valid. 
