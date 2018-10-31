@@ -171,9 +171,3 @@ The Laplace-smoothed probability of event a in probability distribution A is as 
 </p align = "center">
 
 Where k is a parameter that determines how many times each possible event is added. As long as k is greater than or equal to 1, every event has non-zero probability. Increasing k causes the distribution to become more similar to the uniform distribution, but as long as we are consistent with the value of k across models, the results should be statistically valid. 
-
-
-
-
-
-
