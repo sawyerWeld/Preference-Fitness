@@ -11,14 +11,31 @@ def np_index(array, value):
 # If rank1 has {a > b} and rank2 has {a > b}, add 0
 # If rank1 has {a > b} and rank2 has no info on the 
 # relationship between a and b, add 0.5. 
+def ktdistanceSOI__(a, b):
+    pairs = itertools.combinations(a, 2)
+    count = 0.0
+    for i, j in pairs:
+        
+        half = False
+        first = np_index(a, i) - np_index(a, j)
+        
+        try:
+            secnd = np_index(b, i) - np_index(b, j)
+        except:
+            half = True
+            count += 0.5
+        if not half and (first * secnd < 0):
+            count += 1
+    return count
+
 def ktdistanceSOI(a, b):
     pairs = itertools.combinations(a, 2)
     count = 0.0
     for i, j in pairs:
-        print('-----',i, j)
+        #print('-----',i, j)
         half = False
         first = np_index(a, i) - np_index(a, j)
-        print(first, np_index(a, i))
+        #print(first, np_index(a, i))
         try:
             secnd = np_index(b, i) - np_index(b, j)
         except:
@@ -96,7 +113,6 @@ def costFunctionSOI(params, dataset):
 # eta is acceptance param in range [0.0, 1.0)
 # see Lu & Boutillier 2014
 def generateMallowsSet(num, N, eta, centroid=0):
-    swaps = 0
     if centroid == 0:
         centroid = np.arange(N)
     list = []
@@ -105,21 +121,17 @@ def generateMallowsSet(num, N, eta, centroid=0):
         ord[0] = centroid[0]
         for i in range(1, N):
             ord[i] = centroid[i]
-
-
             j = i
-            while (eta >  np.random.uniform(0.0, 1.0) and j >= 1):
-                
+            while (eta > np.random.uniform(0.0,1.0) and j >= 1):
                 ord[j], ord[j-1] = ord[j-1], ord[j]
-                swaps += 1
                 j -= 1
 
         list.append(ord)
-    print(swaps)
     return list
 
 centroid = [3, 4, 1, 2, 5]
 data = generateMallowsSet(10,5,0.9)
+print(data)
 print(ktdistanceSOI(centroid, list(data[1])))
 
 
