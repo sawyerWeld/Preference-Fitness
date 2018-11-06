@@ -1,1 +1,2 @@
-half = True
+
+        print('Q,P',Q,P)

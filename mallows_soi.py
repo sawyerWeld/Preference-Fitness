@@ -1,10 +1,6 @@
-# Mallows SOI functions having odd errors, even though the functions
-# work fine in the eta vs kt dist jupyter notebook
-
-# this is me pasting from the notebook to here 
-
 import numpy as np
 import itertools
+import math
 
 # num = number of ranks
 # N = length of each rank
@@ -56,7 +52,11 @@ def ktdistanceSOI(a, b):
 # The probability of a given ranking given the central
 # ranking, sigma, and the dispersion param phi
 def P(r, sigma, phi):
-    return (Z(phi, len(r)-1)) * (phi ** (ktdistanceSOI(r, sigma)))
+    # return 1.0 / (Z(phi, len(r)-1)) * (phi ** (ktdistanceSOI(r, sigma)))
+    norm = 1.0 / Z(phi, len(r)-1)
+    also = math.exp(-1.0 * phi * ktdistanceSOI(r, sigma))
+    return norm * also
+
 
 # Equation 3 from Lu & Boutillier 2014
 def Z(phi, m):
@@ -66,38 +66,20 @@ def Z(phi, m):
         product *= part
     return product
 
-def test_Z():
-    ans = Z(2, 3)
-    print(ans)
-    # 1             | 1
-    # 1 + 2         | 3
-    # 1 + 2 + 4     | 7
-    # 1 + 2 + 4 + 8 | 15
-    # 1 * 3 * 7 * 15 = 315
-    assert(ans == 315)
-    print('Test Passed')
-
-def test_P():
-    r = np.asarray([2,1,3,4,5])
-    sigma = np.asarray([1,2,3,4,5])
-    phi = 1.5
-    i = 0.05
-    print("Phi | P(r)")
-    while i < 1.0:
-        ans = P(r, sigma, i)
-        print("%.2f" % i,"%.10f" %ans)
-        i += 0.05
-    # print(ans)
-    
-
-    pass
-
 # (1 + φ + φ^2 + ... + φ^i)
-def partial(phi, i):
+def partial_2(phi, i):
     li = np.arange(i)
-    seq = map(lambda x: phi ** x, li)
+    seq = map(lambda x: math.exp(-1.0 * phi * x), li)
     ans = 1.0 * np.sum(np.fromiter(seq, dtype=np.float))
     return ans
+
+# rewrote partial to make sure i wasnt messing something up
+# hard to debug lambdas
+def partial(phi, i):
+    total = 0
+    for j in range(0,i):
+        total += math.exp(j * -1 * phi)
+    return total
 
 def costFunction(params, dataset):
     central_ranking, phi = params
@@ -120,11 +102,20 @@ def generateOrdering(order):
         # swap two random ones
     return order
 
-def generateDispersion(phi):
+def generateDispersion_outdated(phi):
     delta = np.random.uniform(-0.1,0.1)
     new = phi + delta
     while(new <= 0 or new > 1):
         delta = np.random.uniform(-0.1,0.1)
+        new = phi + delta
+    return new
+
+def generateDispersion(phi):
+    t_p = 0.9 # tuning param
+    delta = np.random.uniform(-1 * t_p,t_p)
+    new = phi + delta
+    while(new <= 0):
+        delta = np.random.uniform(-1 * t_p,t_p)
         new = phi + delta
     return new
 

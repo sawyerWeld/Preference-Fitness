@@ -20,14 +20,15 @@ print(length_probs)
 print(candidates)
 
 def findMallows():
-    params = [np.asarray([1,2,3,4]), 0.5]
+    params = [np.asarray([1,2,3,4]), 2]
     return MetropolisRunner.metHastings(mal.costFunction, params, mal.generateCandidate, votes, 1000, 0)
 
 def findPlackett():
     initial = pl.initialWeights(N = 4)
     return MetropolisRunner.metHastings(pl.preflibSOIcost, initial, pl.genCandidateTransfer, votes, 1000, 0)
 
-findPlackett()
+# findPlackett()
+findMallows()
 
 def p_mallows(r, params):
     sigma, phi = params
@@ -37,7 +38,7 @@ def p_plackett(r, params):
     weights = params
     return pl.prob_ranking(r, weights)
 
-print(votes)
+# print(votes)
 
 def findDivergence(votes, mallows_params, pl_params):
     kl_divergence = 0
@@ -54,4 +55,4 @@ def findDivergence(votes, mallows_params, pl_params):
     # Mallows phi doesnt work right
     # Handly 0s in K-L divergence
 
-print(findDivergence(votes, findMallows(), findPlackett()))
+# print(findDivergence(votes, findMallows(), findPlackett()))
