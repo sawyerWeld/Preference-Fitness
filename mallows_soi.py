@@ -56,7 +56,7 @@ def ktdistanceSOI(a, b):
 # The probability of a given ranking given the central
 # ranking, sigma, and the dispersion param phi
 def P(r, sigma, phi):
-    return (1.0 / Z(phi, len(r))) * (phi ** (ktdistanceSOI(r, sigma)))
+    return (Z(phi, len(r)-1)) * (phi ** (ktdistanceSOI(r, sigma)))
 
 # Equation 3 from Lu & Boutillier 2014
 def Z(phi, m):
@@ -78,14 +78,15 @@ def test_Z():
     print('Test Passed')
 
 def test_P():
-    r = np.asarray([1,2,3])
-    sigma = np.asarray([1,3,2])
+    r = np.asarray([2,1,3,4,5])
+    sigma = np.asarray([1,2,3,4,5])
     phi = 1.5
-    i = 0.25
+    i = 0.05
+    print("Phi | P(r)")
     while i < 1.0:
         ans = P(r, sigma, i)
-        print(i, ans)
-        i += 0.25
+        print("%.2f" % i,"%.10f" %ans)
+        i += 0.05
     # print(ans)
     
 
@@ -132,3 +133,5 @@ def generateCandidate(params):
     new_ranking = generateOrdering(central_ranking)
     new_phi = generateDispersion(phi)
     return [new_ranking, new_phi]
+
+# test_P()

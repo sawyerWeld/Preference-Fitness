@@ -2,6 +2,7 @@
 
 import random
 import numpy as np
+import math
 
 def initialWeights(N=5, mode='random', data=None):
     if mode == 'random':
@@ -73,14 +74,24 @@ def preflibSOIcost(params, dataset):
     probability = 0
     for tup in data:
         num_occurances, succ = tup
-        partial_sum = 0
-        N = len(succ)
-        for j in range(N-1):
-            numer = weights[j]
-            denom = sum(succ[j:N])
-            partial_sum += np.log(numer / denom)
+        # partial_sum = 0
+        # N = len(succ)
+        # for j in range(N-1):
+        #     numer = weights[j]
+        #     denom = sum(succ[j:N])
+        #     partial_sum += np.log(numer / denom)
+        partial_sum = prob_ranking(succ, weights)
         probability += num_occurances * partial_sum
     return probability
+
+def prob_ranking(r, weights):
+    N = len(r)
+    sum = 0
+    for j in range(N-1):
+        numer = weights[j]
+        denom = sum(r[j:N])
+        sum += math.log(numer / denom)
+    return sum
 
 def genCandidateNormal(weights):
     N = len(weights)

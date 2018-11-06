@@ -56,7 +56,7 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in, write
     print('Minimum cost:', lowest_cost)
     print('~Best params:', lowest_cost_params)
     print("Finished metropolis process")
-    return lowest_cost
+    return lowest_cost_params
 
 
 def run_gaussian():
