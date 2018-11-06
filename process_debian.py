@@ -25,7 +25,7 @@ def findMallows():
 
 def findPlackett():
     initial = pl.initialWeights(N = 4)
-    return MetropolisRunner.metHastings(pl.costFunction, initial, pl.genCandidateTransfer, votes, 1000, 0)
+    return MetropolisRunner.metHastings(pl.preflibSOIcost, initial, pl.genCandidateTransfer, votes, 1000, 0)
 
 findPlackett()
 
@@ -45,7 +45,13 @@ def findDivergence(votes, mallows_params, pl_params):
         num_occurances, r = tup
         Q = p_mallows(r, mallows_params)
         P = p_plackett(r, pl_params)
-        kl_divergence += num_occurances * (Q * math.log(Q / P))
+        print('Q,P',Q,P)
+        kl_divergence += num_occurances * (Q * math.log(abs(Q / P)))
     return kl_divergence
+
+
+    # PL doesnt return a probability, its a negative number
+    # Mallows phi doesnt work right
+    # Handly 0s in K-L divergence
 
 print(findDivergence(votes, findMallows(), findPlackett()))

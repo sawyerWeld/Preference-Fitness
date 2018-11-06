@@ -86,12 +86,12 @@ def preflibSOIcost(params, dataset):
 
 def prob_ranking(r, weights):
     N = len(r)
-    sum = 0
+    psum = 0
     for j in range(N-1):
         numer = weights[j]
         denom = sum(r[j:N])
-        sum += math.log(numer / denom)
-    return sum
+        psum += math.log(numer / denom)
+    return psum
 
 def genCandidateNormal(weights):
     N = len(weights)
