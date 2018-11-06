@@ -4,10 +4,10 @@ from random import shuffle
 from tqdm import tqdm
 import rankutils
 import time
-import mallows
-import gauss
-import plackettluce as pl
-import readPreflib
+# import mallows
+# import gauss
+# import plackettluce as pl
+# import readPreflib
 
 
 filewrite = []  # this is a placeholder for writing to a file
@@ -16,11 +16,14 @@ filewrite = []  # this is a placeholder for writing to a file
 # params     - starting params to iterate from
 # runs       - how many times to iterate, includes burn in
 # burn_in    - iterations not to record, necessary for markov chains
-def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
+def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in, write=False):
     N = runs
     step = 0
-    lowest_cost = 1000000000000 # How get max int in python?
     lowest_cost_params = None
+    initial_cost = cost_model(params,dataset)
+    lowest_cost = initial_cost
+
+    print('Initial Cost', initial_cost)
 
     for step in tqdm(range(N)):
         # Set the values of the new candidate
@@ -40,12 +43,11 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in):
             params = new_params
             prev_cost = new_cost
             
-
-        if (step > burn_in):
+        if (write and step > burn_in):
             tup = [tuple(params), prev_cost]
             filewrite.append(tup)
 
-        if prev_cost < lowest_cost:
+        if new_cost < lowest_cost:
             lowest_cost = prev_cost
             lowest_cost_params = params
 
@@ -92,7 +94,7 @@ def run_mallows():
             file.write(ordering + '\t' + str(line[1]) + '\n')
     print('Finished writing to file')
 
-run_mallows()
+# run_mallows()
 
 def run_plackettluce():
     # First step: Produce a set of weights as a starting param
