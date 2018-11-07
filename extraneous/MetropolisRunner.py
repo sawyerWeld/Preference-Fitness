@@ -58,6 +58,33 @@ def metHastings(cost_model, params, gen_candidate, dataset, runs, burn_in, write
     print("Finished metropolis process")
     return lowest_cost_params
 
+def metHastingsMax(cost_model, params, gen_candidate, dataset, runs):
+    initial_cost = cost_model(params, dataset)
+    print('Initial: ', initial_cost)
+    greatest_cost = initial_cost
+    max_params = None
+    li = []
+
+    for step in tqdm(range(runs)):
+        new_params = gen_candidate(params)
+        prev_cost = cost_model(params, dataset)
+        new_cost = cost_model(params, dataset)
+
+        u = np.random.uniform(0,1)
+        alpha = (1.0 * new_cost) / prev_cost
+
+        if alpha > u:
+            params = new_params
+            prev_cost = new_cost
+        
+        if new_cost > greatest_cost:
+            greatest_cost = new_cost
+            max_params = params
+
+        li.append(params)
+        
+    return max_params, greatest_cost, li
+
 
 def run_gaussian():
     # Reading in and formatting data for normal distribution

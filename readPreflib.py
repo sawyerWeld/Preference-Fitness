@@ -3,7 +3,7 @@
 from random import shuffle
 from collections import defaultdict
 
-
+# Inefficient, does not store the number of occurances
 def readinSOIdata(filename):
 
     candidates = {}

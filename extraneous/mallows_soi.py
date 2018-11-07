@@ -89,6 +89,20 @@ def costFunction(params, dataset):
         cost += (num_occurances * P(r, central_ranking, phi))
     return cost
 
+# for finding only sigma
+def costFunctionSigma(params, dataset):
+    central_ranking = params
+    cost = 0
+    for tup in dataset:
+        num_occurances, r = tup
+        cost += num_occurances * ktdistanceSOI(central_ranking, r)
+    return cost
+
+def generateCandidatePhi(params):
+    central_ranking, phi = params
+    new_phi = generateDispersion(phi)
+    return [central_ranking, new_phi]
+
 def generateOrdering(order):
     # A do()while{} would work better here, not sure how in python
     tuning_parameter = 0.3
@@ -102,6 +116,7 @@ def generateOrdering(order):
         # swap two random ones
     return order
 
+# When using phi bounded by (0,1]
 def generateDispersion_outdated(phi):
     delta = np.random.uniform(-0.1,0.1)
     new = phi + delta
@@ -111,7 +126,7 @@ def generateDispersion_outdated(phi):
     return new
 
 def generateDispersion(phi):
-    t_p = 0.9 # tuning param
+    t_p = 0.1 # tuning param
     delta = np.random.uniform(-1 * t_p,t_p)
     new = phi + delta
     while(new <= 0):

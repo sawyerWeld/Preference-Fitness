@@ -19,16 +19,35 @@ print(length_probs)
 
 print(candidates)
 
+def findMallowsSigma():
+    params = np.asarray([1,2,3,4])
+    return MetropolisRunner.metHastings(mal.costFunctionSigma, params, mal.generateOrdering, votes, 1000, 0)
+
+def findMallowsPhi(sigma):
+    params = [sigma, 1.0]
+    return MetropolisRunner.metHastingsMax(mal.costFunction, params, mal.generateCandidatePhi, votes, 500)
+
 def findMallows():
-    params = [np.asarray([1,2,3,4]), 2]
-    return MetropolisRunner.metHastings(mal.costFunction, params, mal.generateCandidate, votes, 1000, 0)
+    params = [np.asarray([1,2,3,4]), 1.0]
+    return MetropolisRunner.metHastingsMax(mal.costFunction, params, mal.generateCandidate, votes, 30000)
 
 def findPlackett():
     initial = pl.initialWeights(N = 4)
     return MetropolisRunner.metHastings(pl.preflibSOIcost, initial, pl.genCandidateTransfer, votes, 1000, 0)
 
+# max_params, greatest_cost, li = findMallows()
+# print(max_params, greatest_cost)
+
+print(findMallowsSigma())
+
 # findPlackett()
-findMallows()
+# sigma = [2, 1, 3, 4] # findMallowsSigma()
+# phi, cost, li = findMallowsPhi(sigma)
+# print(phi, cost)
+# print(li)
+
+# np.savetxt('data_output/phi.csv', li, delimiter=',')
+
 
 def p_mallows(r, params):
     sigma, phi = params
