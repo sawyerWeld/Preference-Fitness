@@ -13,7 +13,7 @@ def maximize(cost_model, lengths, params, gen_candidate, dataset, runs):
         new_cost = cost_model(params, dataset, lengths)
         
         u = np.random.uniform(0,1)
-        alpha = (1.0 * new_cost) / prev_cost
+        alpha = ((1.0 * new_cost) + 1)/ (prev_cost+1)
 
         if alpha > u:
             params = new_params
