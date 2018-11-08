@@ -82,3 +82,6 @@ analysis/.ipynb_checkpoints/Phi_vs_Eta_Wrong-checkpoint.ipynb
 *.soi
 tempCodeRunnerFile.py
 .ipynb_checkpoints
+pickle/plackett2002_3mil_2.p
+*.p
+
