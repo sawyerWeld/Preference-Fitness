@@ -84,3 +84,4 @@ tempCodeRunnerFile.py
 .ipynb_checkpoints
 pickle/plackett2002_3mil_2.p
 
+*.soc
