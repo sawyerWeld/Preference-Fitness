@@ -24,3 +24,4 @@ def maximize(cost_model, lengths, params, gen_candidate, dataset, runs):
             max_params = params
         
     return max_params, greatest_cost
+    
