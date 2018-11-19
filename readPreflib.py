@@ -86,5 +86,7 @@ def soiInputwithNumVotes(filename):
             length_counts[len(nums)] += num_occurances
             votes.append((num_occurances, nums))
 
+    if 0 in length_counts:
+        del(length_counts[0])
 
     return candidates, length_counts, num_votes, votes
