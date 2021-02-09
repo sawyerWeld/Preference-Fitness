@@ -141,22 +141,3 @@ For i in Range(1, Length(Centroid)):
 ```
 
 When generating a new set of orderings according to a Mallows model, we want the average Kendall-Tau distance from the central ranking to each other ranking to be the same in the generated set and the real set. To do this we first computing the average distance in the real data, which is equal to the cost function divided by the number of rankings in the dataset. 
-
-To find the relationship between η and KT we generate rankings of a given length across a range of η's. Using rankings of length 12 we find the following approximate curve:
-
-**todo make better plot
-<p align = "center">
-<img src="/plotting/KTvsEta_lowres.png" width="350" title="hover text">
-</p align = "center">
-
-Fitting a curve to this we find the relationship:
-
-<p align = "center">
-<a href="https://www.codecogs.com/eqnedit.php?latex=KT&space;\approx&space;1.542&space;e^{-3.729&space;\eta}&space;-&space;0.569" target="_blank"><img src="https://latex.codecogs.com/gif.latex?KT&space;\approx&space;1.542&space;e^{-3.729&space;\eta}&space;-&space;0.569" title="KT \approx 1.542 e^{-3.729 \eta} - 0.569" /></a>
-</p align = "center">
-
-Which is equal to
-
-<p align = "center">
-<a href="https://www.codecogs.com/eqnedit.php?latex=\eta&space;=&space;0.268\ln{\Bigl|&space;\frac{KT&space;&plus;&space;0.569}{1.542}\Bigr|}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta&space;=&space;0.268\ln{\Bigl|&space;\frac{KT&space;&plus;&space;0.569}{1.542}\Bigr|}" title="\eta = 0.268\ln{\Bigl| \frac{KT + 0.569}{1.542}\Bigr|}" /></a>
-</p align = "center">
