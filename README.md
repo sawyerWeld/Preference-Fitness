@@ -1,5 +1,5 @@
 # 2021 Note:
-### This code is from my undergraduate thesis, I have made it public for a few people who have asked. Some code here may not be the most up to date or correct, take everything with a grain of salt
+### This code is from my undergraduate thesis, I have made it public for a few people who have asked. Some code here may not be the most up to date or correct, take everything with a grain of salt. The following info in the readme obviously hadn't been updated since before I started programming for example.
 
 
 ### Immediate Issues
